@@ -1,0 +1,17 @@
+.default-btn.read-more {
+  background: transparent;
+  border: 1px solid #A0A3C4;
+  padding: 10px;
+}
+
+.default-btn.read-more:hover {
+  background: linear-gradient(96.36deg, #5637D1 -1.32%, #3F7BD0 49.23%, #1BE1CF 103.04%);
+}
+
+.default-btn.buy {
+  padding: 10px;
+}
+
+.Home-token-card-options.bridge {
+  margin-top: 40px;
+}

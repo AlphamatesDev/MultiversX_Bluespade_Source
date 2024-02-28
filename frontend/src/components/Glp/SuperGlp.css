@@ -1,0 +1,263 @@
+.Super-Glp {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 1.5rem;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.Super-blp-title {
+    margin-top: 1.5rem;
+    font-size: 3.8rem;
+    font-weight: 500;
+    font-weight: bold;
+}
+
+.Super-blp-description {
+    font-size: 1.8rem;
+    color: #b7b7bd;
+    margin-bottom: 0.8rem;
+}
+
+.Top-card-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 2.5rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(90deg, #20d5cf, #5242d1);;
+    box-shadow: 0px 0.5rem 1.3rem #00000085;
+    border: 1px solid #1E1E1E;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.Top-card-option-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5rem;
+}
+
+.Top-card-option-left-image-div {
+    width: 40%;
+}
+
+.Top-card-option-left-image {
+    justify-self: center;
+    width: 80%;
+}
+
+.Top-card-option-left-status {
+    margin-left: 20px;
+    width: 60%;
+}
+
+.Top-card-option-left-status-text1 {
+    margin-top: 1.5rem;
+    font-size: 2.325rem;
+}
+
+.Top-card-option-left-status-text2 {
+    margin-top: 1.5rem;
+    font-size: 2.325rem;
+}
+
+.Top-card-option-left-status-text3 {
+    font-size: 1.8rem;
+}
+
+.Top-card-option-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    margin-right: 5rem;
+}
+
+.Top-card-option-right-content {
+    position: relative;
+    width: 100%;
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-align: right;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.Top-card-option-right-content-start {
+    text-align: left;
+}
+
+.Top-card-option-right-btn {
+    position: relative;
+    display: grid;
+    border-radius: 0.4rem;
+    font-size: 14px;
+    line-height: 2rem;
+    font-weight: 500;
+    letter-spacing: 0px;
+    padding: 10px 30px;
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 10px;
+    text-decoration: none;
+    box-sizing: border-box;
+    min-height: 3.6rem;
+    background: #530909;
+    color: white;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    appearance: none;
+}
+
+.Top-card-option-right-btn:hover {
+    background: #400909;
+  }
+
+.Tier-events-text {
+    margin-top: 1.5rem;
+    font-size: 2.5rem;
+}
+
+.Tier-card-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1.5rem;
+    grid-row-gap: 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (max-width: 750px) {
+    .Tier-card-options {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-row-gap: 1.5rem;
+    }
+
+    .Super-Glp {
+        width: 95%;
+    }
+}
+
+.Tier-card-option {
+    position: relative;
+    padding: 2.325rem;
+    border-radius: 0.8rem;
+    /* opacity: 0.9; */
+    /* max-width: 59.2rem; */
+    background: #070707;
+    box-shadow: 0px 0.5rem 1.3rem #00000085;
+    border: 1px solid #1E1E1E;
+}
+
+.Tier-card-option-focused {
+    position: relative;
+    padding: 2.325rem;
+    border-radius: 0.8rem;
+    /* opacity: 0.9; */
+    /* max-width: 59.2rem; */
+    background: linear-gradient(90deg, #20d5cf, #5242d1);
+    box-shadow: 0px 0.5rem 1.3rem #00000085;
+    border: 1px solid #1E1E1E;
+    color: white !important;
+}
+
+.Tier-card-option-title {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 2.325rem;
+    line-height: 3.1rem;
+    letter-spacing: 0px;
+    color: #ffffff;
+    height: 3.1rem;
+    margin-bottom: 15px;
+}
+
+.Tier-card-option-title-text {
+    width: 40%;
+}
+
+.Tier-card-option-title-progress {
+    width: 60%;
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.Tier-card-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 1.5rem;
+    padding: unset;
+
+    font-size: 1.8rem;
+    line-height: 2.3rem;
+    letter-spacing: 0px;
+    margin-top: 1.9375rem;
+}
+
+.Tier-card-content-left {
+    font-size: 1.8rem;
+    color: #a0a3c4;
+}
+
+.Tier-card-content-left-focused {
+    font-size: 1.8rem;
+    color: #ffffff;
+}
+
+.Tier-card-content-right {
+    font-size: 2rem;
+    color: #a0a3c4;
+    text-align: right;
+}
+
+.Tier-card-content-right-range {
+    font-size: 2rem;
+    color: #00acc3;
+}
+
+.Tier-card-content-right-reward {
+    color: #a0a3c4;
+}
+
+.Tier-card-content-right-reward-focused {
+    color: #ffffff;
+}
+
+.Tier-card-content-right-sub {
+    font-size: 1.4rem;
+    color: #a0a3c4;
+}
+
+.Tier-card-content-right-sub-focused {
+    font-size: 1.4rem;
+    color: #ffffff;
+}
+
+@media (max-width: 1050px) {
+    .Top-card-options {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding: 2.325rem;
+        border-radius: 0.8rem;
+        background: linear-gradient(90deg, #20d5cf, #5242d1);
+        box-shadow: 0px 0.5rem 1.3rem #00000085;
+        border: 1px solid #1E1E1E;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .Top-card-option-left {
+        margin-left: 0.1rem;
+    }
+
+    .Top-card-option-right {
+        margin-right: 0.1rem;
+    }
+}
