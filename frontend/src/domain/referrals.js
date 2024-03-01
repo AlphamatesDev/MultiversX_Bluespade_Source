@@ -7,24 +7,20 @@ import ReferralStorage from "abis/ReferralStorage.json";
 import { MAX_REFERRAL_CODE_LENGTH, isAddressZero, isHashZero } from "lib/legacy";
 import { getContract } from "config/contracts";
 import { REGEX_VERIFY_BYTES32 } from "components/Referrals/referralsHelper";
-import { CRONOS, POLYGON, SKALE } from "config/chains";
-import { cronosReferralsGraphClient, polygonReferralsGraphClient, skaleReferralsGraphClient } from "lib/subgraph/clients";
+import { SKALE } from "config/chains";
+import { skaleReferralsGraphClient } from "lib/subgraph/clients";
 import { callContract, contractFetcher } from "lib/contracts";
 import { helperToast } from "lib/helperToast";
 import { REFERRAL_CODE_KEY } from "config/localStorage";
 import { getProvider } from "lib/rpc";
 import { bigNumberify } from "lib/numbers";
 
-const ACTIVE_CHAINS = [CRONOS, POLYGON, SKALE];
+const ACTIVE_CHAINS = [SKALE];
 const DISTRIBUTION_TYPE_REBATES = "1";
 const DISTRIBUTION_TYPE_DISCOUNT = "2";
 
 function getGraphClient(chainId) {
-  if (chainId === CRONOS) {
-    return cronosReferralsGraphClient;
-  } else if (chainId === POLYGON) {
-    return polygonReferralsGraphClient;
-  } else if (chainId === SKALE) {
+ if (chainId === SKALE) {
     return skaleReferralsGraphClient;
   }
   throw new Error(`Unsupported chain ${chainId}`);
@@ -95,7 +91,7 @@ export function useUserCodesOnAllChain(account) {
   `;
   useEffect(() => {
     async function main() {
-      const [cronosCodes, polygonCodes, skaleCodes] = await Promise.all(
+      const [skaleCodes] = await Promise.all(
         ACTIVE_CHAINS.map((chainId) => {
           return getGraphClient(chainId)
             .query({ query, variables: { account: (account || "").toLowerCase() } })
@@ -104,21 +100,11 @@ export function useUserCodesOnAllChain(account) {
             });
         })
       );
-      const [codeOwnersOnCronos = [], codeOwnersOnPolygon = [], codeOwnersOnSkale = []] = await Promise.all([
-        getCodeOwnersData(CRONOS, account, cronosCodes),
-        getCodeOwnersData(POLYGON, account, polygonCodes),
+      const [codeOwnersOnSkale = []] = await Promise.all([
         getCodeOwnersData(SKALE, account, skaleCodes),
       ]);
 
       setData({
-        [CRONOS]: codeOwnersOnCronos.reduce((acc, cv) => {
-          acc[cv.code] = cv;
-          return acc;
-        }, {}),
-        [POLYGON]: codeOwnersOnPolygon.reduce((acc, cv) => {
-          acc[cv.code] = cv;
-          return acc;
-        }, {}),
         [SKALE]: codeOwnersOnSkale.reduce((acc, cv) => {
           acc[cv.code] = cv;
           return acc;

@@ -7,11 +7,11 @@ import "./IDO.css";
 
 import { Trans } from "@lingui/macro";
 import { useChainId } from "lib/chains";
-import { POLYGON } from "config/chains";
 import SEO from "components/Common/SEO";
 import { getPageTitle } from "lib/legacy";
 import { useWeb3React } from "@web3-react/core";
 import { switchNetwork } from "lib/wallets";
+import { SKALE } from "config/chains";
 
 export default function IDO(props) {
   const { chainId } = useChainId();
@@ -38,7 +38,7 @@ export default function IDO(props) {
   return (
     <div className="default-container page-layout Buy-sell-blp">
       {
-        chainId === POLYGON ?
+        chainId === SKALE ?
         <IDOContent {...props} isBuying={isBuying} setIsBuying={setIsBuying} />
         :
         <SEO title={getPageTitle("Bluespade is on IDO")}>
@@ -46,10 +46,10 @@ export default function IDO(props) {
             <div className="page-not-found-container">
               <div className="page-not-found">
                 <h2>
-                  <Trans>Bluespade is conducting IDO on the Polygon network.</Trans>
+                  <Trans>Bluespade is conducting IDO on the Skale network.</Trans>
                 </h2>
                 <p className="ido-go-back">
-                  <span onClick={() => onNetworkSelect(POLYGON)}>Switch to Polygon</span>
+                  <span onClick={() => onNetworkSelect(SKALE)}>Switch to Skale</span>
                 </p>
               </div>
             </div>

@@ -10,18 +10,8 @@ import { getContract } from "config/contracts";
 import GLP from "abis/GLP.json";
 import { contractFetcher } from "lib/contracts";
 import { bigNumberify, expandDecimals } from "lib/numbers";
-import { POLYGON, CRONOS } from "config/chains";
 
-const tierDataCronos = [
-    { name: "Tier1", start: 0, end: 30000, rewards: "15,000", per_blp: "0.5", start_show: "0", end_show: "30K" },
-    { name: "Tier2", start: 30001, end: 70000, rewards: "15,000", per_blp: "0.375", start_show: "30K", end_show: "70K" },
-    { name: "Tier3", start: 70001, end: 120000, rewards: "15,000", per_blp: "0.3", start_show: "70K", end_show: "120K" },
-    { name: "Tier4", start: 120001, end: 180000, rewards: "15,000", per_blp: "0.25", start_show: "120K", end_show: "180K" },
-    { name: "Tier5", start: 180001, end: 250000, rewards: "14,000", per_blp: "0.2", start_show: "180K", end_show: "250K" },
-    { name: "Tier6", start: 250001, end: 350000, rewards: "15,000", per_blp: "0.15", start_show: "250K", end_show: "350K" },
-];
-
-const tierDataPolygon = [
+const tierDataSkale = [
     { name: "Tier1", start: 0, end: 250000, rewards: "125,000", per_blp: "0.5", start_show: "$0", end_show: "250K" },
     { name: "Tier2", start: 250001, end: 500000, rewards: "93,750", per_blp: "0.375", start_show: "250K", end_show: "500K" },
     { name: "Tier3", start: 500001, end: 1000000, rewards: "100,000", per_blp: "0.2", start_show: "500K", end_show: "1M" },
@@ -45,7 +35,7 @@ export default function SuperGlp(props) {
     }
   );
 
-  const tierData = chainId === CRONOS ? tierDataCronos : tierDataPolygon;
+  const tierData = tierDataSkale;
 
   let glpSupply = glpSupplyByDecimals ? bigNumberify(glpSupplyByDecimals) : bigNumberify(0);
   glpSupply = glpSupply.div(expandDecimals(1, 18)).toString();
@@ -120,7 +110,7 @@ export default function SuperGlp(props) {
   return (
     <div className="Super-Glp">
         
-        <div className="Super-blp-title">Super BLP Rewards on {chainId === CRONOS ? "Cronos" : (chainId === POLYGON ? "Polygon" : "Skale")}</div>
+        <div className="Super-blp-title">Super BLP Rewards on {"Skale"}</div>
 
         <div className="Super-blp-description">Earn High APR Bonus Rewards For Minting Early</div>
 

@@ -1,4 +1,4 @@
-import { CRONOS, POLYGON, SKALE } from "./chains";
+import { SKALE } from "./chains";
 
 export const GMX_STATS_API_URL = "https://stats.gmx.io/api";
 
@@ -7,8 +7,6 @@ export const MEXC_API_URL = "https://chart.bluespade.xyz/api/mexc";
 
 const BACKEND_URLS = {
   default: "https://gmx-server-mainnet.uw.r.appspot.com",
-  [CRONOS]: "https://gmx-server-mainnet.uw.r.appspot.com",
-  [POLYGON]: "https://gmx-server-mainnet.uw.r.appspot.com",
   [SKALE]: "https://gmx-server-mainnet.uw.r.appspot.com",
 };
 

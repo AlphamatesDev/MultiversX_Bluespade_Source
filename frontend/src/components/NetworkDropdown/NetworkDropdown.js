@@ -7,10 +7,6 @@ import { HiDotsVertical } from "react-icons/hi";
 import "./NetworkDropdown.css";
 import language24Icon from "img/ic_language24.svg";
 import settingsIcon from "img/ic_settings_16.svg";
-// import arbitrumIcon from "img/ic_arbitrum_24.svg";
-// import avaxIcon from "img/ic_avalanche_24.svg";
-import polygonIcon from "img/ic_polygon_24.svg";
-import cronosIcon from "img/ic_cronos_24.svg";
 import skaleIcon from "img/ic_skale_24.svg";
 import checkedIcon from "img/ic_checked.svg";
 import { importImage } from "lib/legacy";
@@ -91,7 +87,7 @@ function NavIcons({ selectorLabel, mode }) {
       <button className={cx("btn-primary small transparent")}>
         <img
           className="network-dropdown-icon"
-          src={selectorLabel === "Cronos" ? cronosIcon : (selectorLabel === "Polygon" ? polygonIcon : skaleIcon)}
+          src={skaleIcon}
           alt={selectorLabel}
         />
       </button>

@@ -71,17 +71,9 @@ export default function TokenCard({ showRedirectModal, redirectPopupTimestamp })
             <Trans>BLU is the utility and governance token. Accrues 30% of the platform's generated fees.</Trans>
           </div>
           <div className="Home-token-card-option-apr">
-            {/* <Trans>Cronos APR:</Trans> <APRLabel chainId={CRONOS} label="gmxAprTotal" key="CRONOS" />{", "} */}
-            {/* <Trans>Polygon APR:</Trans> <APRLabel chainId={POLYGON} label="gmxAprTotal" key="POLYGON" />{", "} */}
             <Trans>Skale APR:</Trans> <APRLabel chainId={SKALE} label="gmxAprTotal" key="SKALE" />
           </div>
           <div className="Home-token-card-option-action">
-            {/* <BuyLink to="/buy_blu" className="default-btn buy" network={CRONOS}>
-              <Trans>Buy on Cronos</Trans>
-            </BuyLink>
-            <BuyLink to="/buy_blu" className="default-btn buy" network={POLYGON}>
-              <Trans>Buy on Polygon</Trans>
-            </BuyLink> */}
             <BuyLink to="/buy_blu" className="default-btn buy" network={SKALE}>
               <Trans>Buy on Skale</Trans>
             </BuyLink>
@@ -101,17 +93,9 @@ export default function TokenCard({ showRedirectModal, redirectPopupTimestamp })
             <Trans>BLP is the liquidity provider token. Accrues 70% of the platform's generated fees.</Trans>
           </div>
           <div className="Home-token-card-option-apr">
-            {/* <Trans>Cronos APR:</Trans> <APRLabel chainId={CRONOS} label="glpAprTotal" key="CRONOS" />{", "}
-            <Trans>Polygon APR:</Trans> <APRLabel chainId={POLYGON} label="glpAprTotal" key="POLYGON" />{", "} */}
             <Trans>Skale APR:</Trans> <APRLabel chainId={SKALE} label="glpAprTotal" key="SKALE" />
           </div>
           <div className="Home-token-card-option-action">
-            {/* <BuyLink to="/buy_blp" className="default-btn buy" network={CRONOS}>
-              <Trans>Buy on Cronos</Trans>
-            </BuyLink>
-            <BuyLink to="/buy_blp" className="default-btn buy" network={POLYGON}>
-              <Trans>Buy on Polygon</Trans>
-            </BuyLink> */}
             <BuyLink to="/buy_blp" className="default-btn buy" network={SKALE}>
               <Trans>Buy on Skale</Trans>
             </BuyLink>

@@ -3,7 +3,6 @@ import { Trans, t } from "@lingui/macro";
 import cx from "classnames";
 import { getCodeError, getReferralCodeTakenStatus, getSampleReferrarStat } from "./referralsHelper";
 import { useWeb3React } from "@web3-react/core";
-import { CRONOS, POLYGON } from "config/chains";
 import { helperToast } from "lib/helperToast";
 import { useDebounce } from "lib/useDebounce";
 
@@ -129,7 +128,7 @@ export function AffiliateCodeForm({
     }
 
     if (takenStatus === "none" || takenStatus === "other") {
-      const ownerOnOtherNetwork = takenInfo[chainId === CRONOS ? "ownerCronos" : (chainId === POLYGON ? "ownerPolygon" : "ownerSkale")];
+      const ownerOnOtherNetwork = takenInfo["ownerSkale"];
       try {
         const tx = await handleCreateReferralCode(referralCode);
         if (callAfterSuccess) {

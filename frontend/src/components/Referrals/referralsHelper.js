@@ -6,7 +6,7 @@ import {
   REFERRAL_CODE_QUERY_PARAM,
 } from "lib/legacy";
 import { encodeReferralCode, getReferralCodeOwner } from "domain/referrals";
-import { POLYGON, CRONOS, SKALE } from "config/chains";
+import { SKALE } from "config/chains";
 import { bigNumberify, formatAmount } from "lib/numbers";
 import { t } from "@lingui/macro";
 import { getRootUrl } from "lib/url";
@@ -23,26 +23,16 @@ export function isRecentReferralCodeNotExpired(referralCodeInfo) {
 
 export async function getReferralCodeTakenStatus(account, referralCode, chainId) {
   const referralCodeBytes32 = encodeReferralCode(referralCode);
-  const [ownerPolygon, ownerCronos, ownerSkale] = await Promise.all([
-    getReferralCodeOwner(CRONOS, referralCodeBytes32),
-    getReferralCodeOwner(POLYGON, referralCodeBytes32),
+  const [ownerSkale] = await Promise.all([
     getReferralCodeOwner(SKALE, referralCodeBytes32),
   ]);
 
-  const takenOnCronos = 
-    !isAddressZero(ownerCronos) && (ownerCronos !== account || (ownerCronos === account && chainId === CRONOS));
-  const takenOnPolygon = 
-    !isAddressZero(ownerPolygon) && (ownerPolygon !== account || (ownerPolygon === account && chainId === POLYGON));
   const takenOnSkale = 
     !isAddressZero(ownerSkale) && (ownerSkale !== account || (ownerSkale === account && chainId === SKALE));
 
   const referralCodeTakenInfo = {
-    [CRONOS]: takenOnCronos,
-    [POLYGON]: takenOnPolygon,
     [SKALE]: takenOnSkale,
-    both: takenOnPolygon && takenOnCronos && takenOnSkale,
-    ownerPolygon,
-    ownerCronos,
+    both: takenOnSkale,
     ownerSkale,
   };
 
@@ -52,7 +42,7 @@ export async function getReferralCodeTakenStatus(account, referralCode, chainId)
   if (referralCodeTakenInfo[chainId]) {
     return { status: "current", info: referralCodeTakenInfo };
   }
-  if (chainId === CRONOS ? referralCodeTakenInfo[CRONOS] : (chainId === POLYGON ? referralCodeTakenInfo[POLYGON] : referralCodeTakenInfo[SKALE])) {
+  if (referralCodeTakenInfo[SKALE]) {
     return { status: "other", info: referralCodeTakenInfo };
   }
   return { status: "none", info: referralCodeTakenInfo };

@@ -42,7 +42,7 @@ import {
   USDG_ADDRESS,
   USDG_DECIMALS,
 } from "lib/legacy";
-import { CRONOS, getChainName, getConstant, IS_NETWORK_DISABLED, isSupportedChain } from "config/chains";
+import { SKALE, getChainName, getConstant, IS_NETWORK_DISABLED, isSupportedChain } from "config/chains";
 import * as Api from "domain/legacy";
 import { getContract } from "config/contracts";
 
@@ -217,12 +217,6 @@ export default function SwapBox(props) {
   const isShort = swapOption === SHORT;
 
   // const getLeaderboardLink = () => {
-  //   if (chainId === POLYGON) {
-  //     return "https://www.gmx.house/polygon/leaderboard";
-  //   }
-  //   if (chainId === CRONOS) {
-  //     return "https://www.gmx.house/cronos/leaderboard";
-  //   }
   //   if (chainId === SKALE) {
   //     return "https://www.gmx.house/skale/leaderboard";
   //   }
@@ -1059,9 +1053,9 @@ export default function SwapBox(props) {
       sentMsg: `${longOrShortText} submitted.`,
       failMsg: `${longOrShortText} failed.`,
       successMsg,
-      // for Cronos, sometimes the successMsg shows after the position has already been executed
-      // hide the success message for Cronos as a workaround
-      hideSuccessMsg: chainId === CRONOS,
+      // for Skale, sometimes the successMsg shows after the position has already been executed
+      // hide the success message for Skale as a workaround
+      hideSuccessMsg: chainId === SKALE,
     })
       .then(async () => {
         setIsConfirming(false);

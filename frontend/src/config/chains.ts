@@ -4,8 +4,6 @@ import { sample } from "lodash";
 
 const { parseEther } = ethers.utils;
 
-export const POLYGON = 137;
-export const CRONOS = 25;
 export const SKALE = 1444673419;
 export const MULTIVERSX = 10000;
 
@@ -13,67 +11,29 @@ export const MULTIVERSX = 10000;
 export const DEFAULT_CHAIN_ID = SKALE;
 export const CHAIN_ID = DEFAULT_CHAIN_ID;
 
-export const SUPPORTED_CHAIN_IDS = [/*CRONOS, POLYGON, */SKALE];
+export const SUPPORTED_CHAIN_IDS = [SKALE];
 
 export const IS_NETWORK_DISABLED = {
-  [POLYGON]: true,
-  [CRONOS]: true,
   [SKALE]: false
 };
 
 export const CHAIN_NAMES_MAP = {
-  [POLYGON]: "Polygon",
-  [CRONOS]: "Cronos",
   [SKALE]: "Skale"
 };
 
 export const GAS_PRICE_ADJUSTMENT_MAP = {
-  [POLYGON]: "30000000000", // 30 gwei
-  [CRONOS]: "3000000000", // 3 gwei
   [SKALE]: "100000", // 100 kwei
 };
 
 export const MAX_GAS_PRICE_MAP = {
-  [POLYGON]: "200000000000", // 200 gwei
-  [CRONOS]: "5000000000000", // 5000 gwei
   [SKALE]: "500000", // 500 kwei
 };
 
 export const HIGH_EXECUTION_FEES_MAP = {
-  [POLYGON]: 3, // 3 USD
-  [CRONOS]: 3, // 3 USD
   [SKALE]: 3, // 3 USD
 };
 
 const constants = {
-  [POLYGON]: {
-    nativeTokenSymbol: "MATIC",
-    wrappedTokenSymbol: "WMATIC",
-    defaultCollateralSymbol: "USDC",
-    defaultFlagOrdersEnabled: true,
-    positionReaderPropsLength: 9,
-    v2: true,
-
-    SWAP_ORDER_EXECUTION_GAS_FEE: parseEther("0.01"),
-    INCREASE_ORDER_EXECUTION_GAS_FEE: parseEther("0.01"),
-    // contract requires that execution fee be strictly greater than instead of gte
-    DECREASE_ORDER_EXECUTION_GAS_FEE: parseEther("0.0100001"),
-  },
-
-  [CRONOS]: {
-    nativeTokenSymbol: "CRO",
-    wrappedTokenSymbol: "WCRO",
-    defaultCollateralSymbol: "USDC",
-    defaultFlagOrdersEnabled: true,
-    positionReaderPropsLength: 9,
-    v2: true,
-
-    SWAP_ORDER_EXECUTION_GAS_FEE: parseEther("0.01"),
-    INCREASE_ORDER_EXECUTION_GAS_FEE: parseEther("0.01"),
-    // contract requires that execution fee be strictly greater than instead of gte
-    DECREASE_ORDER_EXECUTION_GAS_FEE: parseEther("0.0100001"),
-  },
-
   [SKALE]: {
     nativeTokenSymbol: "USDT", //"SKL",
     wrappedTokenSymbol: "USDT", //"SKL",
@@ -91,18 +51,7 @@ const constants = {
 
 const ALCHEMY_WHITELISTED_DOMAINS = ["gmx.io", "app.gmx.io"];
 
-export const POLYGON_RPC_PROVIDERS = ["https://polygon-bor.publicnode.com"]; // Polygon Network
-export const CRONOS_RPC_PROVIDERS = ["https://cronos.blockpi.network/v1/rpc/public"]; //Cronos MAINNET
 export const SKALE_RPC_PROVIDERS = ["https://testnet.skalenodes.com/v1/juicy-low-small-testnet"]; //Europa Skale TESTNET
-// BSC TESTNET
-// const RPC_PROVIDERS = [
-//   "https://data-seed-prebsc-1-s1.binance.org:8545",
-//   "https://data-seed-prebsc-2-s1.binance.org:8545",
-//   "https://data-seed-prebsc-1-s2.binance.org:8545",
-//   "https://data-seed-prebsc-2-s2.binance.org:8545",
-//   "https://data-seed-prebsc-1-s3.binance.org:8545",
-//   "https://data-seed-prebsc-2-s3.binance.org:8545"
-// ]
 
 export const BSC_RPC_PROVIDERS = [
   "https://bsc-dataseed.binance.org",
@@ -121,40 +70,14 @@ export const BSC_RPC_PROVIDERS = [
 ];
 
 export const RPC_PROVIDERS = {
-  [POLYGON]: POLYGON_RPC_PROVIDERS,
-  [CRONOS]: CRONOS_RPC_PROVIDERS,
   [SKALE]: SKALE_RPC_PROVIDERS,
 };
 
 export const FALLBACK_PROVIDERS = {
-  [POLYGON]: ["https://polygon.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
-  [CRONOS]: ["https://cronos.blockpi.network/v1/rpc/public"],
   [SKALE]: ["https://testnet.skalenodes.com/v1/juicy-low-small-testnet"],
 };
 
 export const NETWORK_METADATA = {
-  [POLYGON]: {
-    chainId: "0x" + POLYGON.toString(16),
-    chainName: "Polygon",
-    nativeCurrency: {
-      name: "polygonEth",
-      symbol: "polygonEth",
-      decimals: 18,
-    },
-    rpcUrls: POLYGON_RPC_PROVIDERS,
-    blockExplorerUrls: [getExplorerUrl(POLYGON)],
-  },
-  [CRONOS]: {
-    chainId: "0x" + CRONOS.toString(16),
-    chainName: "Cronos",
-    nativeCurrency: {
-      name: "CRO",
-      symbol: "CRO",
-      decimals: 18,
-    },
-    rpcUrls: CRONOS_RPC_PROVIDERS,
-    blockExplorerUrls: [getExplorerUrl(CRONOS)],
-  },
   [SKALE]: {
     chainId: "0x" + SKALE.toString(16),
     chainName: "Skale",
@@ -211,10 +134,6 @@ export function getExplorerUrl(chainId) {
     return "https://ropsten.etherscan.io/";
   } else if (chainId === 42) {
     return "https://kovan.etherscan.io/";
-  } else if (chainId === POLYGON) {
-    return "https://polygonscan.com/";
-  } else if (chainId === CRONOS) {
-    return "https://cronoscan.com/";
   } else if (chainId === SKALE) {
     return "https://juicy-low-small-testnet.explorer.testnet.skalenodes.com/";
   } else if (chainId === MULTIVERSX) {

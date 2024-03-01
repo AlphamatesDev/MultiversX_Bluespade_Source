@@ -25,7 +25,7 @@ import {
   USDG_DECIMALS,
   adjustForDecimals,
 } from "lib/legacy";
-import { CRONOS, getChainName, getConstant, IS_NETWORK_DISABLED } from "config/chains";
+import { SKALE, getChainName, getConstant, IS_NETWORK_DISABLED } from "config/chains";
 import { createDecreaseOrder, useHasOutdatedUi } from "domain/legacy";
 import { getContract } from "config/contracts";
 import PositionRouter from "abis/PositionRouter.json";
@@ -707,9 +707,9 @@ export default function PositionSeller(props) {
       successMsg,
       failMsg: t`Close failed.`,
       setPendingTxns,
-      // for Cronos, sometimes the successMsg shows after the position has already been executed
-      // hide the success message for Cronos as a workaround
-      hideSuccessMsg: chainId === CRONOS,
+      // for Skale, sometimes the successMsg shows after the position has already been executed
+      // hide the success message for Skale as a workaround
+      hideSuccessMsg: chainId === SKALE,
     })
       .then(async (res) => {
         setFromValue("");

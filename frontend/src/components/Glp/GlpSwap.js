@@ -24,6 +24,7 @@ import {
 } from "lib/legacy";
 
 import { useGmxPrice } from "domain/legacy";
+import { SKALE } from "config/chains";
 
 // import TokenSelector from "../Exchange/TokenSelector";
 import BuyInputSection from "../BuyInputSection/BuyInputSection";
@@ -42,15 +43,13 @@ import glp24Icon from "img/ic_glp_24.svg";
 import glp40Icon from "img/ic_glp_40.svg";
 import arrowIcon from "img/ic_convert_down.svg";
 
-import polygon16Icon from "img/ic_polygon_16.svg";
-import cronos16Icon from "img/ic_cronos_16.svg";
 import skale16Icon from "img/ic_skale_16.svg";
 
 import "./GlpSwap.css";
 import AssetDropdown from "pages/Dashboard/AssetDropdown";
 import SwapErrorModal from "./SwapErrorModal";
 import StatsTooltipRow from "../StatsTooltip/StatsTooltipRow";
-import { CRONOS, POLYGON, getChainName, IS_NETWORK_DISABLED } from "config/chains";
+import { getChainName, IS_NETWORK_DISABLED } from "config/chains";
 import { callContract, contractFetcher } from "lib/contracts";
 import { approveTokens, useInfoTokens } from "domain/tokens";
 // import { useLocalStorageByChainId } from "lib/localStorage";
@@ -225,7 +224,7 @@ export default function GlpSwap(props) {
 
   const inCooldownWindow = redemptionTime && parseInt(Date.now() / 1000) < redemptionTime;
 
-  const glpSupply = balancesAndSupplies ? (chainId === CRONOS ? balancesAndSupplies[1].sub(bigNumberify("0x51C4200C1A9BF7EB08")) : balancesAndSupplies[1]) : bigNumberify(0);
+  const glpSupply = balancesAndSupplies ? (chainId === SKALE ? balancesAndSupplies[1].sub(bigNumberify("0x51C4200C1A9BF7EB08")) : balancesAndSupplies[1]) : bigNumberify(0);
   // bigNumberify("0x51C4200C1A9BF7EB08") is 1508318578909587696392, and this is different between fsBLP & BLP supplies
   const usdgSupply = balancesAndSupplies ? balancesAndSupplies[3] : bigNumberify(0);
   let aum;
@@ -719,15 +718,7 @@ export default function GlpSwap(props) {
             <div className="App-card-title-mark">
               <div className="App-card-title-mark-icon">
                 <img src={glp40Icon} alt="glp40Icon" />
-                {chainId === CRONOS ? (
-                  <img src={cronos16Icon} alt="cronos16Icon" className="selected-network-symbol" />
-                ) : (
-                  chainId === POLYGON ? (
-                    <img src={polygon16Icon} alt="polygon16Icon" className="selected-network-symbol" />
-                  ) : (
-                    <img src={skale16Icon} alt="skale16Icon" className="selected-network-symbol" />
-                  )
-                )}
+                <img src={skale16Icon} alt="skale16Icon" className="selected-network-symbol" />
               </div>
               <div className="App-card-title-mark-info">
                 <div className="App-card-title-mark-title">BLP</div>

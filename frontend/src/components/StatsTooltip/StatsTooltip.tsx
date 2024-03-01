@@ -7,8 +7,6 @@ import { formatAmount } from "lib/numbers";
 type Props = {
   title: string;
   total?: BigNumber;
-  polygonValue?: BigNumber;
-  cronosValue?: BigNumber;
   skaleValue?: BigNumber;
   showDollar?: boolean;
   decimalsForConversion: number;
@@ -19,8 +17,6 @@ type Props = {
 export default function StatsTooltip({
   title,
   total,
-  polygonValue,
-  cronosValue,
   skaleValue,
   showDollar = true,
   decimalsForConversion = USD_DECIMALS,
@@ -29,28 +25,6 @@ export default function StatsTooltip({
 }: Props) {
   return (
     <>
-      {/* <p className="Tooltip-row">
-        <span className="label">
-          <Trans>on Cronos:</Trans>
-        </span>
-        <span className="amount">
-          {!isFloatNum && showDollar && "$"}
-          {isFloatNum && ""+ cronosValue}
-          {!isFloatNum && formatAmount(cronosValue, decimalsForConversion, 0, true)}
-          {!showDollar && symbol && " " + symbol}
-        </span>
-      </p>
-      <p className="Tooltip-row">
-        <span className="label">
-          <Trans>on Polygon:</Trans>
-        </span>
-        <span className="amount">
-          {!isFloatNum && showDollar && "$"}
-          {isFloatNum && ""+polygonValue}
-          {!isFloatNum && formatAmount(polygonValue, decimalsForConversion, 0, true)}
-          {!showDollar && symbol && " " + symbol}
-        </span>
-      </p> */}
       <p className="Tooltip-row">
         <span className="label">
           <Trans>on Skale:</Trans>

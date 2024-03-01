@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import {
-  CRONOS,
-  CRONOS_RPC_PROVIDERS,
-  POLYGON,
-  POLYGON_RPC_PROVIDERS,
   SKALE,
   SKALE_RPC_PROVIDERS,
   DEFAULT_CHAIN_ID,
@@ -94,8 +90,6 @@ export const getWalletConnectConnector = () => {
 
   return new WalletConnectConnector({
     rpc: {
-      [CRONOS]: CRONOS_RPC_PROVIDERS[0],
-      [POLYGON]: POLYGON_RPC_PROVIDERS[0],
       [SKALE]: SKALE_RPC_PROVIDERS[0],
     },
     qrcode: true,

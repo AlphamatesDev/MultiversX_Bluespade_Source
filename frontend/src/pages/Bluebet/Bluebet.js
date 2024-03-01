@@ -7,7 +7,7 @@ import "./Bluebet.css";
 
 import { Trans } from "@lingui/macro";
 import { useChainId } from "lib/chains";
-import { POLYGON } from "config/chains";
+import { SKALE } from "config/chains";
 import SEO from "components/Common/SEO";
 import { getPageTitle } from "lib/legacy";
 import { useWeb3React } from "@web3-react/core";
@@ -38,7 +38,7 @@ export default function Bluebet(props) {
   return (
     <div className="default-container page-layout Buy-sell-blp">
       {
-        chainId === POLYGON ?
+        chainId === SKALE ?
         <BluebetContent {...props} isBuying={isBuying} setIsBuying={setIsBuying} />
         :
         <SEO title={getPageTitle("Bluespade is on Bluebet")}>
@@ -46,10 +46,10 @@ export default function Bluebet(props) {
             <div className="page-not-found-container">
               <div className="page-not-found">
                 <h2>
-                  <Trans>Bluespade is conducting Bluebet on the Polygon network.</Trans>
+                  <Trans>Bluespade is conducting Bluebet on the Skale network.</Trans>
                 </h2>
                 <p className="bluebet-go-back">
-                  <span onClick={() => onNetworkSelect(POLYGON)}>Switch to Polygon</span>
+                  <span onClick={() => onNetworkSelect(SKALE)}>Switch to Skale</span>
                 </p>
               </div>
             </div>

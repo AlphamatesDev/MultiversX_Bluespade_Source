@@ -1,8 +1,8 @@
 import useSWR from "swr";
 import { arrayURLFetcher } from "lib/legacy";
-import { CRONOS, POLYGON, SKALE } from "config/chains";
+import { SKALE } from "config/chains";
 import { getServerUrl } from "config/backend";
-const ACTIVE_CHAIN_IDS = [CRONOS, POLYGON, SKALE];
+const ACTIVE_CHAIN_IDS = [SKALE];
 
 export default function useFeesSummary() {
   const { data: feesSummary } = useSWR(

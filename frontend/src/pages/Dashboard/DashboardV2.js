@@ -22,10 +22,10 @@ import {
 import {
   useTotalGmxInLiquidity, useGmxPrice, useTotalGmxStaked, useTotalGmxSupply,
   // useTradeVolumeHistory,
-  usePositionStatesCronos, usePositionStatesPolygon, usePositionStatesSkale,
+  usePositionStatesSkale,
   // useTotalVolume,
-  useFeesDataCronos, useFeesDataPolygon, useFeesDataSkale,
-  useVolumeDataCronos, useVolumeDataPolygon, useVolumeDataSkale,
+  useFeesDataSkale,
+  useVolumeDataSkale,
   formatNumber
 } from "domain/legacy";
 // import useFeesSummary from "domain/useFeesSummary";
@@ -45,10 +45,6 @@ import glp40Icon from "img/ic_glp_40.svg";
 // import arbitrum24Icon from "img/ic_arbitrum_24.svg";
 // import avalanche16Icon from "img/ic_avalanche_16.svg";
 // import avalanche24Icon from "img/ic_avalanche_24.svg";
-import cronos16Icon from "img/ic_cronos_16.svg";
-import cronos24Icon from "img/ic_cronos_24.svg";
-import polygon16Icon from "img/ic_polygon_16.svg";
-import polygon24Icon from "img/ic_polygon_24.svg";
 import skale16Icon from "img/ic_skale_16.svg";
 import skale24Icon from "img/ic_skale_24.svg";
 // import heroBgVideo from "img/BlueToken.webm"
@@ -60,7 +56,7 @@ import AssetDropdown from "./AssetDropdown";
 import SEO from "components/Common/SEO";
 import StatsTooltip from "components/StatsTooltip/StatsTooltip";
 import StatsTooltipRow from "components/StatsTooltip/StatsTooltipRow";
-import { CRONOS, POLYGON, SKALE, getChainName } from "config/chains";
+import { SKALE, getChainName } from "config/chains";
 // import { getServerUrl } from "config/backend";
 import { contractFetcher } from "lib/contracts";
 import { useInfoTokens } from "domain/tokens";
@@ -68,7 +64,7 @@ import { /*getTokenBySymbol,*/ getWhitelistedTokens, GLP_POOL_COLORS } from "con
 import { bigNumberify, expandDecimals, formatAmount } from "lib/numbers";
 import { useChainId } from "lib/chains";
 // import { formatDate } from "lib/dates";
-// const ACTIVE_CHAIN_IDS = [CRONOS, POLYGON, SKALE];
+// const ACTIVE_CHAIN_IDS = [SKALE];
 
 const { AddressZero } = ethers.constants;
 
@@ -148,12 +144,10 @@ export default function DashboardV2() {
   const { active, library } = useWeb3React();
   const { chainId } = useChainId();
   // const totalVolume = useTotalVolume();
-  const [totalVolumeCronos, totalVolumeDeltaCronos] = useVolumeDataCronos();
-  const [totalVolumePolygon, totalVolumeDeltaPolygon] = useVolumeDataPolygon();
   const [totalVolumeSkale, totalVolumeDeltaSkale] = useVolumeDataSkale();
 
-  const totalVolume = /*(totalVolumeCronos ? totalVolumeCronos : 0) + (totalVolumePolygon ? totalVolumePolygon : 0) + */(totalVolumeSkale ? totalVolumeSkale : 0)
-  const totalVolumeDelta = /*(totalVolumeDeltaCronos ? totalVolumeDeltaCronos : 0) + (totalVolumeDeltaPolygon ? totalVolumeDeltaPolygon : 0) + */(totalVolumeDeltaSkale ? totalVolumeDeltaSkale : 0)
+  const totalVolume = totalVolumeSkale ? totalVolumeSkale : 0
+  const totalVolumeDelta = totalVolumeDeltaSkale ? totalVolumeDeltaSkale : 0
 
   const chainName = getChainName(chainId);
   // const { data: positionStats } = useSWR(
@@ -162,8 +156,6 @@ export default function DashboardV2() {
   //     fetcher: arrayURLFetcher,
   //   }
   // );
-  const positionStatsCronos = usePositionStatesCronos(chainId);
-  const positionStatsPolygon = usePositionStatesPolygon(chainId);
   const positionStatsSkale = usePositionStatesSkale(chainId);
 
   // const { data: hourlyVolumes } = useSWR(
@@ -177,20 +169,14 @@ export default function DashboardV2() {
   // const dailyVolume = useVolumeDataCronos({from: parseInt(Date.now() / 1000) - 86400, to: parseInt(Date.now() / 1000) });
 
 
-  let { total: totalGmxSupply, cronos: gmxSupplyCronos, polygon: gmxSupplyPolygon, skale: gmxSupplySkale } = useTotalGmxSupply();
+  let { total: totalGmxSupply, skale: gmxSupplySkale } = useTotalGmxSupply();
 
   // const currentVolumeInfo = getVolumeInfo(hourlyVolumes);
   // const positionStatsInfo = getPositionStats(positionStats);
-  const positionStatsInfoCronos = positionStatsCronos;
-  const positionStatsInfoPolygon = positionStatsPolygon;
   const positionStatsInfoSkale = positionStatsSkale;
 
-  const totalLongPosition = /*(positionStatsInfoCronos.totalLongPositionSizes? bigNumberify(positionStatsInfoCronos.totalLongPositionSizes) : bigNumberify(0)).add(
-    positionStatsInfoPolygon.totalLongPositionSizes ? bigNumberify(positionStatsInfoPolygon.totalLongPositionSizes) : bigNumberify(0)).add(*/
-    positionStatsInfoSkale.totalLongPositionSizes ? bigNumberify(positionStatsInfoSkale.totalLongPositionSizes) : bigNumberify(0)//);
-  const totalShortPosition = /*(positionStatsInfoCronos.totalShortPositionSizes? bigNumberify(positionStatsInfoCronos.totalShortPositionSizes) : bigNumberify(0)).add(
-    positionStatsInfoPolygon.totalShortPositionSizes ? bigNumberify(positionStatsInfoPolygon.totalShortPositionSizes) : bigNumberify(0)).add(*/
-    positionStatsInfoSkale.totalShortPositionSizes ? bigNumberify(positionStatsInfoSkale.totalShortPositionSizes) : bigNumberify(0)//);
+  const totalLongPosition = positionStatsInfoSkale.totalLongPositionSizes ? bigNumberify(positionStatsInfoSkale.totalLongPositionSizes) : bigNumberify(0)
+  const totalShortPosition = positionStatsInfoSkale.totalShortPositionSizes ? bigNumberify(positionStatsInfoSkale.totalShortPositionSizes) : bigNumberify(0)
 
   // function getWhitelistedTokenAddresses(chainId) {
   //   const whitelistedTokens = getWhitelistedTokens(chainId);
@@ -232,8 +218,6 @@ export default function DashboardV2() {
   // );
 
   const { infoTokens } = useInfoTokens(library, chainId, active, undefined, undefined);
-  // const { infoTokens: infoTokensCronos } = useInfoTokens(null, CRONOS, active, undefined, undefined);
-  // const { infoTokens: infoTokensPolygon } = useInfoTokens(null, POLYGON, active, undefined, undefined);
   // const { infoTokens: infoTokensSkale } = useInfoTokens(null, SKALE, active, undefined, undefined);
 
   // const { data: currentFees } = useSWR(
@@ -294,8 +278,6 @@ export default function DashboardV2() {
   //     },
   //     { total: 0 }
   //   );
-  const [totalFeesCronos/*, totalFeesDeltaCronos */] = useFeesDataCronos()
-  const [totalFeesPolygon/*, totalFeesDeltaPolygon */] = useFeesDataPolygon()
   const [totalFeesSkale/*, totalFeesDeltaSkale */] = useFeesDataSkale()
   const totalFees = /*(totalFeesCronos ? totalFeesCronos : 0) + (totalFeesPolygon ? totalFeesPolygon : 0) + */(totalFeesSkale ? totalFeesSkale : 0);
   // const totalFeesDelta = (totalFeesDeltaCronos ? totalFeesDeltaCronos : 0) + (totalFeesDeltaPolygon ? totalFeesDeltaPolygon : 0) + (totalFeesDeltaSkale ? totalFeesDeltaSkale : 0);
@@ -308,7 +290,7 @@ export default function DashboardV2() {
 
   let { total: totalGmxInLiquidity } = useTotalGmxInLiquidity(chainId, active);
 
-  let { cronos: cronosStakedGmx, polygon: polygonStakedGmx, skale: skaleStakedGmx, total: totalStakedGmx } = useTotalGmxStaked();
+  let { skale: skaleStakedGmx, total: totalStakedGmx } = useTotalGmxStaked();
 
   let gmxMarketCap;
   if (gmxPrice && totalGmxSupply) {
@@ -352,9 +334,9 @@ export default function DashboardV2() {
   // let totalFloorPriceFundUsd = 0;
 
   // if (glpPrice) {
-    // const glpFloorPriceFundUsd = glpFloorPriceFund.mul(glpPrice).div(expandDecimals(1, 18));
+  // const glpFloorPriceFundUsd = glpFloorPriceFund.mul(glpPrice).div(expandDecimals(1, 18));
 
-    // totalFloorPriceFundUsd = glpFloorPriceFundUsd.add(usdcFloorPriceFund);
+  // totalFloorPriceFundUsd = glpFloorPriceFundUsd.add(usdcFloorPriceFund);
   // }
 
   let adjustedUsdgSupply = bigNumberify(0);
@@ -484,8 +466,6 @@ export default function DashboardV2() {
     },
   ];
 
-  // const totalStatsStartDate = chainId === CRONOS ? t`05 Apr 2023` : t`01 Sep 2021`;
-
   let stableGlp = 0;
   let totalGlp = 0;
 
@@ -563,8 +543,6 @@ export default function DashboardV2() {
             <div className="section-title-content">
               <div className="Page-title">
                 <Trans>Stats</Trans>
-                {chainId === CRONOS && <img src={cronos24Icon} alt="cronos24Icon" />}
-                {chainId === POLYGON && <img src={polygon24Icon} alt="polygon24Icon" />}
                 {chainId === SKALE && <img src={skale24Icon} alt="skale24Icon" />}
               </div>
             </div>
@@ -617,8 +595,6 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Volume`}
-                          cronosValue={totalVolumeDeltaCronos ? formatNumber(totalVolumeDeltaCronos, { currency: true, compact: false }) : `$0`}
-                          polygonValue={totalVolumeDeltaPolygon ? formatNumber(totalVolumeDeltaPolygon, { currency: true, compact: false }) : `$0`}
                           skaleValue={totalVolumeDeltaSkale ? formatNumber(totalVolumeDeltaSkale, { currency: true, compact: false }) : `$0`}
                           total={totalVolumeDelta ? formatNumber(totalVolumeDelta, { currency: true, compact: false }) : `$0`}
                           isFloatNum={true}
@@ -644,8 +620,6 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Long Positions`}
-                          cronosValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoCronos.totalLongPositionSizes ? positionStatsInfoCronos.totalLongPositionSizes : bigNumberify(0))}
-                          polygonValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoPolygon.totalLongPositionSizes ? positionStatsInfoPolygon.totalLongPositionSizes : bigNumberify(0))}
                           skaleValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoSkale.totalLongPositionSizes ? positionStatsInfoSkale.totalLongPositionSizes : bigNumberify(0))}
                           total={ethers.BigNumber.from("0xE8D4A51000").mul(totalLongPosition)}
                         />
@@ -670,8 +644,6 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Short Positions`}
-                          cronosValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoCronos.totalShortPositionSizes ? positionStatsInfoCronos.totalShortPositionSizes : bigNumberify(0))}
-                          polygonValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoPolygon.totalShortPositionSizes ? positionStatsInfoPolygon.totalShortPositionSizes : bigNumberify(0))}
                           skaleValue={ethers.BigNumber.from("0xE8D4A51000").mul(positionStatsInfoSkale.totalShortPositionSizes ? positionStatsInfoSkale.totalShortPositionSizes : bigNumberify(0))}
                           total={ethers.BigNumber.from("0xE8D4A51000").mul(totalShortPosition)}
                         />
@@ -699,8 +671,6 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Total Fees`}
-                          cronosValue={totalFeesCronos ? formatNumber(totalFeesCronos, { currency: true, compact: false }) : `$0`}
-                          polygonValue={totalFeesPolygon ? formatNumber(totalFeesPolygon, { currency: true, compact: false }) : `$0`}
                           skaleValue={totalFeesSkale ? formatNumber(totalFeesSkale, { currency: true, compact: false }) : `$0`}
                           total={totalFees ? formatNumber(totalFees, { currency: true, compact: false }) : `$0`}
                           decimalsForConversion={0}
@@ -722,8 +692,6 @@ export default function DashboardV2() {
                       renderContent={() => (
                         <StatsTooltip
                           title={t`Total Volume`}
-                          cronosValue={totalVolumeCronos ? formatNumber(totalVolumeCronos, { currency: true, compact: false }) : `$0`}
-                          polygonValue={totalVolumePolygon ? formatNumber(totalVolumePolygon, { currency: true, compact: false }) : `$0`}
                           skaleValue={totalVolumeSkale ? formatNumber(totalVolumeSkale, { currency: true, compact: false }) : `$0`}
                           total={totalVolume ? formatNumber(totalVolume, { currency: true, compact: false }) : `$0`}
                           isFloatNum={true}
@@ -738,8 +706,6 @@ export default function DashboardV2() {
           <div className="Tab-title-section">
             <div className="Page-title">
               <Trans>Tokens</Trans>
-              {chainId === CRONOS && <img src={cronos24Icon} alt="cronos24Icon" />}
-              {chainId === POLYGON && <img src={polygon24Icon} alt="polygon24Icon" />}
               {chainId === SKALE && <img src={skale24Icon} alt="skale24Icon" />}
               <div className="Page-description">
                 <Trans>Platform and BLP index tokens.</Trans>
@@ -785,16 +751,6 @@ export default function DashboardV2() {
                           handle={"$" + formatAmount(gmxPrice, USD_DECIMALS, 4, true)}
                           renderContent={() => (
                             <>
-                              {/* <StatsTooltipRow
-                                  label={t`on Cronos`}
-                                  value={formatAmount(gmxPriceFromCronos, USD_DECIMALS, 4, true)}
-                                  showDollar={true}
-                                />
-                                <StatsTooltipRow
-                                  label={t`on Polygon`}
-                                  value={formatAmount(gmxPriceFromPolygon, USD_DECIMALS, 4, true)}
-                                  showDollar={true}
-                                /> */}
                               <StatsTooltipRow
                                 label={t`on Skale`}
                                 value={formatAmount(gmxPriceFromSkale, USD_DECIMALS, 4, true)}
@@ -818,8 +774,6 @@ export default function DashboardV2() {
                         renderContent={() => (
                           <StatsTooltip
                             // title={t`Staked`}
-                            cronosValue={gmxSupplyCronos}
-                            polygonValue={gmxSupplyPolygon}
                             skaleValue={gmxSupplySkale}
                             total={totalGmxSupply}
                             decimalsForConversion={GMX_DECIMALS}
@@ -841,8 +795,6 @@ export default function DashboardV2() {
                         renderContent={() => (
                           <StatsTooltip
                             // title={t`Staked`}
-                            cronosValue={cronosStakedGmx}
-                            polygonValue={polygonStakedGmx}
                             skaleValue={skaleStakedGmx}
                             total={totalStakedGmx}
                             decimalsForConversion={GMX_DECIMALS}
@@ -906,15 +858,7 @@ export default function DashboardV2() {
                   <div className="App-card-title-mark">
                     <div className="App-card-title-mark-icon">
                       <img src={glp40Icon} alt="glp40Icon" />
-                      {chainId === CRONOS ? (
-                        <img src={cronos16Icon} alt={t`Cronos Icon`} className="selected-network-symbol" />
-                      ) : (
-                        chainId === POLYGON ? (
-                          <img src={polygon16Icon} alt={t`Polygon Icon`} className="selected-network-symbol" />
-                        ) : (
-                          <img src={skale16Icon} alt={t`Skale Icon`} className="selected-network-symbol" />
-                        )
-                      )}
+                      <img src={skale16Icon} alt={t`Skale Icon`} className="selected-network-symbol" />
                     </div>
                     <div>
                       <div className="App-card-title-mark-info">
@@ -1011,8 +955,6 @@ export default function DashboardV2() {
             {/* <div className="token-table-wrapper App-card">
               <div className="App-card-title">
                 <Trans>Markets</Trans>{" "}
-                {chainId === CRONOS && <img src={cronos16Icon} alt={t`Cronos Icon`} />}
-                {chainId === POLYGON && <img src={polygon16Icon} alt={t`Polygon Icon`} />}
                 {chainId === SKALE && <img src={skale16Icon} alt={t`Skale Icon`} />}
               </div>
               <div className="App-card-content">

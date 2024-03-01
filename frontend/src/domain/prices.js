@@ -8,7 +8,6 @@ import { GMX_STATS_API_URL, MEXC_API_URL } from "config/backend";
 import { chainlinkClient } from "lib/subgraph/clients";
 import { sleep } from "lib/sleep";
 import { formatAmount } from "lib/numbers";
-// import { CRONOS, POLYGON, SKALE } from "config/chains";
 
 const BigNumber = ethers.BigNumber;
 

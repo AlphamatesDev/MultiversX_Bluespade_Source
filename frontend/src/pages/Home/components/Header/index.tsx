@@ -5,7 +5,6 @@ import {
   BlueSpadeHeroSectionLight,
   BlueSpadeHeroSectionDark,
   IsoHeart,
-  Polygon1,
   BluespadeHeroSectionDarkBGVideo
 } from '../../services/Assets'
 import TradeButton from '../buttons/TradeButton'
@@ -47,37 +46,6 @@ const Header = (props: { mode: string, onModeBtn: () => void }) => {
         </div>
       </section>
       <section className='realtime-stats'>
-        {/* <div className='container mx-auto px-5 lg:grid lg:grid-cols-3 lg:gap-[30px] z-10 relative'>
-          <div className='flex items-center p-[18px] col-span-1 border-[1px] border-[#c5e1f2] rounded-[20px] shadow-xl mb-5 dark:bg-[#1b1b34] dark:border-[#3f3f4e]'>
-            <div className='ios-heart mr-[20px]'>
-              <img src={IsoHeart} alt='IsoHeart.png' loading='lazy' />
-            </div>
-            <div className='stat-info w-[270px] font-montserrat'>
-              <p className='mb-[10px] text-[#878787] text-xl dark:text-[#c8c8cd]'>USD Invested</p>
-              <p className='mb-[10px] text-[#484848] text-[20px] font-semibold dark:text-white'>$29,000,000</p>
-              <p className='flex items-center text-[#72ff99] text-xl'><img src={Polygon1} alt='Polygon1.png' loading='lazy' />&nbsp; $172,000 &nbsp;<span className='font-normal text-[13px] text-[#878787]'>(24h)</span></p>
-            </div>
-          </div>
-          <div className='flex items-center p-[18px] col-span-1 border-[1px] border-[#c5e1f2] rounded-[20px] shadow-xl mb-5 dark:bg-[#1b1b34] dark:border-[#3f3f4e]'>
-            <div className='ios-heart mr-[20px]'>
-              <img src={IsoHeart} alt='IsoHeart.png' loading='lazy' />
-            </div>
-            <div className='stat-info w-[270px] font-montserrat'>
-              <p className='mb-[10px] text-[#878787] text-xl dark:text-[#c8c8cd]'>USD Invested</p>
-              <p className='mb-[10px] text-[#484848] text-[20px] font-semibold dark:text-white'>$29,000,000</p>
-              <p className='flex items-center text-[#72ff99] text-xl'><img src={Polygon1} alt='Polygon1.png' loading='lazy' />&nbsp; $172,000 &nbsp;<span className='font-normal text-[13px] text-[#878787]'>(24h)</span></p>
-            </div>
-          </div><div className='flex items-center p-[18px] col-span-1 border-[1px] border-[#c5e1f2] rounded-[20px] shadow-xl mb-5 dark:bg-[#1b1b34] dark:border-[#3f3f4e]'>
-            <div className='ios-heart mr-[20px]'>
-              <img src={IsoHeart} alt='IsoHeart.png' loading='lazy' />
-            </div>
-            <div className='stat-info w-[270px] font-montserrat'>
-              <p className='mb-[10px] text-[#878787] text-xl dark:text-[#c8c8cd]'>USD Invested</p>
-              <p className='mb-[10px] text-[#484848] text-[20px] font-semibold dark:text-white'>$29,000,000</p>
-              <p className='flex items-center text-[#72ff99] text-xl'><img src={Polygon1} alt='Polygon1.png' loading='lazy' />&nbsp; $172,000 &nbsp;<span className='font-normal text-[13px] text-[#878787]'>(24h)</span></p>
-            </div>
-          </div>
-        </div> */}
       </section>
     </header >
   )

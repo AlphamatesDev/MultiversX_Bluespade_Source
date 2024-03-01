@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { arrayURLFetcher, getTotalVolumeSum } from "lib/legacy";
-import { CRONOS, POLYGON, SKALE } from "config/chains";
+import { SKALE } from "config/chains";
 import { getServerUrl } from "config/backend";
 import { bigNumberify } from "lib/numbers";
-const ACTIVE_CHAIN_IDS = [CRONOS, POLYGON, SKALE];
+const ACTIVE_CHAIN_IDS = [SKALE];
 
 export default function useTotalVolume() {
   const { data: totalVolume } = useSWR(

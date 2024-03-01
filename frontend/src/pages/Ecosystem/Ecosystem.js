@@ -5,26 +5,18 @@ import SEO from "components/Common/SEO";
 import Footer from "components/Footer/Footer";
 import { getPageTitle } from "lib/legacy";
 
-import arbitrumIcon from "img/ic_arbitrum_16.svg";
-import avalancheIcon from "img/ic_avalanche_16.svg";
-import cronosIcon from "img/ic_cronos_16.svg";
-import polygonIcon from "img/ic_polygon_16.svg";
 import skaleIcon from "img/ic_skale_16.svg";
 
 import "./Ecosystem.css";
 import ExternalLink from "components/ExternalLink/ExternalLink";
-import { CRONOS, POLYGON, SKALE } from "config/chains";
+import { SKALE } from "config/chains";
 import { t } from "@lingui/macro";
 
 const NETWORK_ICONS = {
-  [CRONOS]: cronosIcon,
-  [POLYGON]: polygonIcon,
   [SKALE]: skaleIcon,
 };
 
 const NETWORK_ICON_ALTS = {
-  [CRONOS]: "Cronos Icon",
-  [POLYGON]: "Polygon Icon",
   [SKALE]: "Skale Icon",
 };
 
@@ -42,7 +34,7 @@ export default function Ecosystem() {
       link: "https://stats.bluespade.xyz/",
       linkLabel: "stats.bluespade.xyz",
       about: t`BLU Stats Page`,
-      chainIds: [CRONOS, POLYGON],
+      chainIds: [SKALE],
     },
     // {
     //   title: "BLU Proposals",
@@ -56,7 +48,7 @@ export default function Ecosystem() {
       link: "https://t.me/BlueSpadexyz",
       linkLabel: "t.me",
       about: t`BLU Announcements and Updates`,
-      chainIds: [CRONOS, POLYGON],
+      chainIds: [SKALE],
     },
   ];
 

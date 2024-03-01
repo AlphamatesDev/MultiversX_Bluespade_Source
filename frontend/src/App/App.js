@@ -72,7 +72,6 @@ import { encodeReferralCode, decodeReferralCode } from "domain/referrals";
 
 import { getContract } from "config/contracts";
 import Vault from "abis/Vault.json";
-import VaultV2b from "abis/VaultV2b.json";
 import PositionRouter from "abis/PositionRouter.json";
 import PageNotFound from "pages/PageNotFound/PageNotFound";
 import PageOnPresale from "pages/PageOnPresale/PageOnPresale";
@@ -88,7 +87,7 @@ import { I18nProvider } from "@lingui/react";
 import { Trans, t } from "@lingui/macro";
 import { defaultLocale, dynamicActivate } from "lib/i18n";
 import { Header } from "components/Header/Header";
-import { CRONOS, POLYGON, SKALE, getExplorerUrl } from "config/chains";
+import { SKALE, getExplorerUrl } from "config/chains";
 import { useLocalStorageSerializeKey } from "lib/localStorage";
 import { helperToast } from "lib/helperToast";
 import {
@@ -133,27 +132,11 @@ const Zoom = cssTransition({
   duration: 200,
 });
 
-// const arbWsProvider = new ethers.providers.WebSocketProvider(getAlchemyWsUrl());
-
-// const avaxWsProvider = new ethers.providers.JsonRpcProvider("https://api.avax.network/ext/bc/C/rpc");
-
-const cronosProvider = new ethers.providers.JsonRpcProvider("https://cronos.blockpi.network/v1/rpc/public");
-
-const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-bor.publicnode.com");
-
 const skaleProvider = new ethers.providers.JsonRpcProvider("https://testnet.skalenodes.com/v1/juicy-low-small-testnet");
 
 function getWsProvider(active, chainId) {
   if (!active) {
     return;
-  }
-
-  if (chainId === POLYGON) {
-    return polygonProvider;
-  }
-
-  if (chainId === CRONOS) {
-    return cronosProvider;
   }
 
   if (chainId === SKALE) {
@@ -417,7 +400,7 @@ function FullApp() {
   const positionRouterAddress = getContract(chainId, "PositionRouter");
 
   useEffect(() => {
-    const wsVaultAbi = chainId === CRONOS ? Vault.abi : VaultV2b.abi;
+    const wsVaultAbi = Vault.abi;
     const wsProvider = getWsProvider(active, chainId);
     if (!wsProvider) {
       return;

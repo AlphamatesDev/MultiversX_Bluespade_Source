@@ -30,7 +30,7 @@ import {
   getPageTitle,
 } from "lib/legacy";
 import { useGmxPrice, useTotalGmxStaked, useTotalGmxSupply } from "domain/legacy";
-import { CRONOS, getConstant } from "config/chains";
+import { getConstant } from "config/chains";
 
 import useSWR from "swr";
 
@@ -1041,15 +1041,15 @@ export default function StakeV2({ setPendingTxns, connectWallet }) {
     }
   );
 
-  const { gmxPrice, /*gmxPriceFromCronos, gmxPriceFromPolygon,*/ gmxPriceFromSkale } = useGmxPrice(
+  const { gmxPrice, gmxPriceFromSkale } = useGmxPrice(
     chainId,
-    { cronos: chainId === CRONOS ? library : undefined },
+    { skale: undefined },
     active
   );
 
   let { total: totalGmxSupply } = useTotalGmxSupply();
 
-  let { /*cronos: cronosGmxStaked, polygon: polygonGmxStaked, skale: skaleGmxStaked,*/ total: totalGmxStaked } = useTotalGmxStaked();
+  let { /* skale: skaleGmxStaked,*/ total: totalGmxStaked } = useTotalGmxStaked();
 
   // const gmxSupplyUrl = getServerUrl(chainId, "/gmx_supply");
   // const { data: gmxSupply } = useSWR([gmxSupplyUrl], {
@@ -1456,16 +1456,6 @@ export default function StakeV2({ setPendingTxns, connectWallet }) {
                       handle={"$" + formatAmount(gmxPrice, USD_DECIMALS, 4, true)}
                       renderContent={() => (
                         <>
-                          {/* <StatsTooltipRow
-                              label={t`Price on Cronos`}
-                              value={formatAmount(gmxPriceFromCronos, USD_DECIMALS, 4, true)}
-                              showDollar={false}
-                            />
-                            <StatsTooltipRow
-                              label={t`Price on Polygon`}
-                              value={formatAmount(gmxPriceFromPolygon, USD_DECIMALS, 4, true)}
-                              showDollar={false}
-                            /> */}
                           <StatsTooltipRow
                             label={t`Price on Skale`}
                             value={formatAmount(gmxPriceFromSkale, USD_DECIMALS, 4, true)}

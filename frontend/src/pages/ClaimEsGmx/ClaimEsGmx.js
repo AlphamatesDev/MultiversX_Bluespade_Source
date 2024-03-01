@@ -13,12 +13,10 @@ import Checkbox from "components/Checkbox/Checkbox";
 
 import "./ClaimEsGmx.css";
 
-import cronosIcon from "img/ic_cronos_96.svg";
-import polygonIcon from "img/ic_polygon_96.svg";
 import skaleIcon from "img/ic_skale_96.svg";
 
 import { Trans, t } from "@lingui/macro";
-import { CRONOS, POLYGON, SKALE } from "config/chains";
+import { SKALE } from "config/chains";
 import { callContract, contractFetcher } from "lib/contracts";
 import { bigNumberify, formatAmount, formatAmountFree, parseValue } from "lib/numbers";
 import { useChainId } from "lib/chains";
@@ -28,10 +26,6 @@ const VEST_WITH_GMX_ARB = "VEST_WITH_GMX_ARB";
 const VEST_WITH_GLP_ARB = "VEST_WITH_GLP_ARB";
 const VEST_WITH_GMX_AVAX = "VEST_WITH_GMX_AVAX";
 const VEST_WITH_GLP_AVAX = "VEST_WITH_GLP_AVAX";
-const VEST_WITH_GMX_CRONOS = "VEST_WITH_GMX_CRONOS";
-const VEST_WITH_GLP_CRONOS = "VEST_WITH_GLP_CRONOS";
-const VEST_WITH_GMX_POLYGON = "VEST_WITH_GMX_POLYGON";
-const VEST_WITH_GLP_POLYGON = "VEST_WITH_GLP_POLYGON";
 const VEST_WITH_GMX_SKALE = "VEST_WITH_GMX_SKALE";
 const VEST_WITH_GLP_SKALE = "VEST_WITH_GLP_SKALE";
 
@@ -139,12 +133,12 @@ export default function ClaimEsGmx({ setPendingTxns }) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [value, setValue] = useState("");
 
-  const isCronos = chainId === CRONOS;
+  const isSkale = chainId === SKALE;
 
   const esGmxIouAddress = getContract(chainId, "ES_GMX_IOU");
 
   const { data: esGmxIouBalance } = useSWR(
-    isCronos && [
+    isSkale && [
       `ClaimEsGmx:esGmxIouBalance:${active}`,
       chainId,
       esGmxIouAddress,
@@ -156,39 +150,9 @@ export default function ClaimEsGmx({ setPendingTxns }) {
     }
   );
 
-  const cronosRewardReaderAddress = getContract(CRONOS, "RewardReader");
-  const polygonRewardReaderAddress = getContract(POLYGON, "RewardReader");
   const skaleRewardReaderAddress = getContract(SKALE, "RewardReader");
 
-  const cronosVesterAdddresses = [getContract(CRONOS, "GmxVester"), getContract(CRONOS, "GlpVester")];
-  const polygonVesterAdddresses = [getContract(POLYGON, "GmxVester"), getContract(POLYGON, "GlpVester")];
   const skaleVesterAdddresses = [getContract(SKALE, "GmxVester"), getContract(SKALE, "GlpVester")];
-
-  const { data: cronosVestingInfo } = useSWR(
-    [
-      `StakeV2:vestingInfo:${active}`,
-      CRONOS,
-      cronosRewardReaderAddress,
-      "getVestingInfoV2",
-      account || PLACEHOLDER_ACCOUNT,
-    ],
-    {
-      fetcher: contractFetcher(undefined, RewardReader, [cronosVesterAdddresses]),
-    }
-  );
-
-  const { data: polygonVestingInfo } = useSWR(
-    [
-      `StakeV2:vestingInfo:${active}`,
-      POLYGON,
-      polygonRewardReaderAddress,
-      "getVestingInfoV2",
-      account || PLACEHOLDER_ACCOUNT,
-    ],
-    {
-      fetcher: contractFetcher(undefined, RewardReader, [polygonVesterAdddresses]),
-    }
-  );
 
   const { data: skaleVestingInfo } = useSWR(
     [
@@ -203,8 +167,6 @@ export default function ClaimEsGmx({ setPendingTxns }) {
     }
   );
 
-  const cronosVestingData = getVestingDataV2(cronosVestingInfo);
-  const polygonVestingData = getVestingDataV2(polygonVestingInfo);
   const skaleVestingData = getVestingDataV2(skaleVestingInfo);
 
   let amount = parseValue(value, 18);
@@ -222,33 +184,7 @@ export default function ClaimEsGmx({ setPendingTxns }) {
 
   const shouldShowStakingAmounts = false;
 
-  if (selectedOption === VEST_WITH_GLP_CRONOS && cronosVestingData) {
-    const result = getVestingValues({
-      minRatio: bigNumberify(320),
-      amount,
-      vestingDataItem: cronosVestingData.glpVester,
-    });
-
-    if (result) {
-      ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
-        result);
-    }
-
-    stakingToken = "BLP";
-  } else if (selectedOption === VEST_WITH_GLP_POLYGON && polygonVestingData) {
-    const result = getVestingValues({
-      minRatio: bigNumberify(320),
-      amount,
-      vestingDataItem: polygonVestingData.glpVester,
-    });
-
-    if (result) {
-      ({ maxVestableAmount, currentRatio, nextMaxVestableEsGmx, nextRatio, initialStakingAmount, nextStakingAmount } =
-        result);
-    }
-
-    stakingToken = "BLP";
-  } else if (selectedOption === VEST_WITH_GLP_SKALE && skaleVestingData) {
+  if (selectedOption === VEST_WITH_GLP_SKALE && skaleVestingData) {
     const result = getVestingValues({
       minRatio: bigNumberify(320),
       amount,
@@ -322,22 +258,6 @@ export default function ClaimEsGmx({ setPendingTxns }) {
       receiver = "0x28863Dd19fb52DF38A9f2C6dfed40eeB996e3818";
     }
 
-    if (selectedOption === VEST_WITH_GMX_CRONOS) {
-      receiver = "0x5d2E4189d0b273d7E7C289311978a0183B96C404";
-    }
-
-    if (selectedOption === VEST_WITH_GLP_CRONOS) {
-      receiver = "0x5d2E4189d0b273d7E7C289311978a0183B96C404";
-    }
-
-    if (selectedOption === VEST_WITH_GMX_POLYGON) {
-      receiver = "0x5d2E4189d0b273d7E7C289311978a0183B96C404";
-    }
-
-    if (selectedOption === VEST_WITH_GLP_POLYGON) {
-      receiver = "0x5d2E4189d0b273d7E7C289311978a0183B96C404";
-    }
-
     if (selectedOption === VEST_WITH_GMX_SKALE) {
       receiver = "0x5d2E4189d0b273d7E7C289311978a0183B96C404";
     }
@@ -365,13 +285,13 @@ export default function ClaimEsGmx({ setPendingTxns }) {
         <div className="Page-title">
           <Trans>Claim esBLU</Trans>
         </div>
-        {!isCronos && (
+        {!isSkale && (
           <div className="Page-description">
             <br />
-            <Trans>Please switch your network to Cronos.</Trans>
+            <Trans>Please switch your network to Skale.</Trans>
           </div>
         )}
-        {isCronos && (
+        {isSkale && (
           <div>
             <div className="Page-description">
               <br />
@@ -401,50 +321,30 @@ export default function ClaimEsGmx({ setPendingTxns }) {
               <br />
               <Trans>
                 You can check your claim history{" "}
-                <ExternalLink href={`https://cronoscan.com/token/${esGmxIouAddress}?a=${account}`}>here</ExternalLink>.
+                <ExternalLink href={`https://skalecan.com/token/${esGmxIouAddress}?a=${account}`}>here</ExternalLink>.
               </Trans>
             </div>
             <br />
             <div className="ClaimEsGmx-vesting-options">
               <Checkbox
-                className="cronos btn btn-primary btn-left btn-lg"
+                className="skale btn btn-primary btn-left btn-lg"
                 isChecked={selectedOption === VEST_WITH_GMX_ARB}
                 setIsChecked={() => setSelectedOption(VEST_WITH_GMX_ARB)}
               >
                 <div className="ClaimEsGmx-option-label">
-                  <Trans>Vest with BLU on Cronos</Trans>
+                  <Trans>Vest with BLU on Skale</Trans>
                 </div>
-                <img src={cronosIcon} alt="Cronos" />
+                <img src={skaleIcon} alt="Skale" />
               </Checkbox>
               <Checkbox
-                className="cronos btn btn-primary btn-left btn-lg"
+                className="skale btn btn-primary btn-left btn-lg"
                 isChecked={selectedOption === VEST_WITH_GLP_ARB}
                 setIsChecked={() => setSelectedOption(VEST_WITH_GLP_ARB)}
               >
                 <div className="ClaimEsGmx-option-label">
-                  <Trans>Vest with BLP on Cronos</Trans>
+                  <Trans>Vest with BLP on Skale</Trans>
                 </div>
-                <img src={cronosIcon} alt="Cronos" />
-              </Checkbox>
-              <Checkbox
-                className="polygon btn btn-primary btn-left btn-lg"
-                isChecked={selectedOption === VEST_WITH_GMX_POLYGON}
-                setIsChecked={() => setSelectedOption(VEST_WITH_GMX_POLYGON)}
-              >
-                <div className="ClaimEsGmx-option-label">
-                  <Trans>Vest with BLU on Polygon</Trans>
-                </div>
-                <img src={polygonIcon} alt="Polygon" />
-              </Checkbox>
-              <Checkbox
-                className="polygon btn btn-primary btn-left btn-lg"
-                isChecked={selectedOption === VEST_WITH_GLP_POLYGON}
-                setIsChecked={() => setSelectedOption(VEST_WITH_GLP_POLYGON)}
-              >
-                <div className="ClaimEsGmx-option-label polygon">
-                  <Trans>Vest with BLP on Polygon</Trans>
-                </div>
-                <img src={polygonIcon} alt="Polygon" />
+                <img src={skaleIcon} alt="Skale" />
               </Checkbox>
               <Checkbox
                 className="skale btn btn-primary btn-left btn-lg"

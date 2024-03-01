@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
-import { bigNumberify, expandDecimals, formatAmount, numberWithCommas } from "lib/numbers";
+import { expandDecimals, formatAmount, numberWithCommas } from "lib/numbers";
 import { useGmxPrice, useTotalGmxSupply, useUserStat } from "domain/legacy";
 import { USD_DECIMALS, GMX_DECIMALS, GLP_DECIMALS } from "lib/legacy";
 import { getContract } from "config/contracts";
@@ -24,24 +24,17 @@ const Home = () => {
 
   let totalUsers = 0;
 
-  const CRONOS = 25
-  const POLYGON = 137
+  const SKALE = 1444673419
 
-  const cronosUserStats = useUserStat(CRONOS);
-  const polygonUserStats = useUserStat(POLYGON);
+  const skaleUserStats = useUserStat(SKALE);
 
-  if (cronosUserStats && cronosUserStats.uniqueCount) {
-    totalUsers += cronosUserStats.uniqueCount;
-  }
-
-  if (polygonUserStats && polygonUserStats.uniqueCount) {
-    totalUsers += polygonUserStats.uniqueCount;
+  if (skaleUserStats && skaleUserStats.uniqueCount) {
+    totalUsers += skaleUserStats.uniqueCount;
   }
 
   const { total: totalGmxSupply } = useTotalGmxSupply();
 
   const { gmxPrice } = useGmxPrice(
-    CRONOS,
     undefined,
     false
   );
@@ -51,81 +44,46 @@ const Home = () => {
     gmxMarketCap = gmxPrice.mul(totalGmxSupply).div(expandDecimals(1, GMX_DECIMALS));
   }
 
-  const readerAddress = getContract(CRONOS, "Reader");
-  const gmxAddress = getContract(CRONOS, "GMX");
-  const glpAddress = getContract(CRONOS, "GLP");
-  const usdgAddress = getContract(CRONOS, "USDG");
-  const glpManagerAddress = getContract(CRONOS, "GlpManager");
+  ////////////////////////** SKALE **/////////////////////////////////
+  const readerAddressSkale = getContract(SKALE, "Reader");
+  const gmxAddressSkale = getContract(SKALE, "GMX");
+  const glpAddressSkale = getContract(SKALE, "GLP");
+  const usdgAddressSkale = getContract(SKALE, "USDG");
+  const glpManagerAddressSkale = getContract(SKALE, "GlpManager");
 
-  const tokensForSupplyQuery = [gmxAddress, glpAddress, usdgAddress];
-  const { data: totalSupplies } = useSWR(
-    [`Dashboard:totalSupplies:${active}`, CRONOS, readerAddress, "getTokenBalancesWithSupplies", AddressZero],
+  const tokensForSupplyQuerySkale = [gmxAddressSkale, glpAddressSkale, usdgAddressSkale];
+  const { data: totalSuppliesSkale } = useSWR(
+    [`Dashboard:totalSupplies:${active}`, SKALE, readerAddressSkale, "getTokenBalancesWithSupplies", AddressZero],
     {
-      fetcher: contractFetcher(library, ReaderV2, [tokensForSupplyQuery]),
+      fetcher: contractFetcher(library, ReaderV2, [tokensForSupplyQuerySkale]),
     }
   );
 
-  const { data: aums } = useSWR([`Dashboard:getAums:${active}`, CRONOS, glpManagerAddress, "getAums"], {
+  const { data: aumsSkale } = useSWR([`Dashboard:getAums:${active}`, SKALE, glpManagerAddressSkale, "getAums"], {
     fetcher: contractFetcher(library, GlpManager),
   });
 
-  let aum;
-  if (aums && aums.length > 0) {
-    aum = aums[0].add(aums[1]).div(2);
+  let aumSkale;
+  if (aumsSkale && aumsSkale.length > 0) {
+    aumSkale = aumsSkale[0].add(aumsSkale[1]).div(2);
   }
 
-  let glpPrice;
-  let glpSupply;
-  let glpMarketCap = bigNumberify(0);
-  if (aum && totalSupplies && totalSupplies[3]) {
-    glpSupply = totalSupplies[3];
+  let glpPriceSkale;
+  let glpSupplySkale;
+  let glpMarketCapSkale;
+  if (aumSkale && totalSuppliesSkale && totalSuppliesSkale[3]) {
+    glpSupplySkale = totalSuppliesSkale[3];
 
-    glpPrice = aum && aum.gt(0) && glpSupply.gt(0)
-      ? aum.mul(expandDecimals(1, GLP_DECIMALS)).div(glpSupply)
+    glpPriceSkale = aumSkale && aumSkale.gt(0) && glpSupplySkale.gt(0)
+      ? aumSkale.mul(expandDecimals(1, GLP_DECIMALS)).div(glpSupplySkale)
       : expandDecimals(1, USD_DECIMALS);
 
-    glpMarketCap = glpPrice.mul(glpSupply).div(expandDecimals(1, GLP_DECIMALS));
+    glpMarketCapSkale = glpPriceSkale.mul(glpSupplySkale).div(expandDecimals(1, GLP_DECIMALS));
   }
 
-  ////////////////////////** POLYGON **/////////////////////////////////
-  const readerAddressPoly = getContract(POLYGON, "Reader");
-  const gmxAddressPoly = getContract(POLYGON, "GMX");
-  const glpAddressPoly = getContract(POLYGON, "GLP");
-  const usdgAddressPoly = getContract(POLYGON, "USDG");
-  const glpManagerAddressPoly = getContract(POLYGON, "GlpManager");
-
-  const tokensForSupplyQueryPoly = [gmxAddressPoly, glpAddressPoly, usdgAddressPoly];
-  const { data: totalSuppliesPoly } = useSWR(
-    [`Dashboard:totalSupplies:${active}`, POLYGON, readerAddressPoly, "getTokenBalancesWithSupplies", AddressZero],
-    {
-      fetcher: contractFetcher(library, ReaderV2, [tokensForSupplyQueryPoly]),
-    }
-  );
-
-  const { data: aumsPoly } = useSWR([`Dashboard:getAums:${active}`, POLYGON, glpManagerAddressPoly, "getAums"], {
-    fetcher: contractFetcher(library, GlpManager),
-  });
-
-  let aumPoly;
-  if (aumsPoly && aumsPoly.length > 0) {
-    aumPoly = aumsPoly[0].add(aumsPoly[1]).div(2);
-  }
-
-  let glpPricePoly;
-  let glpSupplyPoly;
-  let glpMarketCapPoly;
-  if (aumPoly && totalSuppliesPoly && totalSuppliesPoly[3]) {
-    glpSupplyPoly = totalSuppliesPoly[3];
-
-    glpPricePoly = aumPoly && aumPoly.gt(0) && glpSupplyPoly.gt(0)
-      ? aumPoly.mul(expandDecimals(1, GLP_DECIMALS)).div(glpSupplyPoly)
-      : expandDecimals(1, USD_DECIMALS);
-
-    glpMarketCapPoly = glpPricePoly.mul(glpSupplyPoly).div(expandDecimals(1, GLP_DECIMALS));
-  }
-
-  if (glpMarketCapPoly) {
-    glpMarketCap = glpMarketCap.add(glpMarketCapPoly);
+  let glpMarketCap = 0;
+  if (glpMarketCapSkale) {
+    glpMarketCap = glpMarketCap.add(glpMarketCapSkale);
   }
 
   return (
