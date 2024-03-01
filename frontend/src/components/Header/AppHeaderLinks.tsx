@@ -4,10 +4,11 @@ import { Trans } from "@lingui/macro";
 import { Link } from "react-router-dom";
 
 import { HeaderLink } from "./HeaderLink";
-import "./Header.css";
+// import "./Header.css";
 import { isHomeSite } from "lib/legacy";
 import ExternalLink from "components/ExternalLink/ExternalLink";
 import logoImg from "img/logo_GMX.svg";
+// import { Header } from "./Header";
 
 type Props = {
   small?: boolean;
@@ -41,6 +42,15 @@ export function AppHeaderLinks({
           </div>
         </div>
       )}
+      <div className="App-header-link-container">
+        <HeaderLink
+          to="/test"
+          redirectPopupTimestamp={redirectPopupTimestamp}
+          showRedirectModal={showRedirectModal}
+        >
+          Test
+        </HeaderLink>
+      </div>
       <div className="App-header-link-container">
         <HeaderLink
           to="/dashboard"

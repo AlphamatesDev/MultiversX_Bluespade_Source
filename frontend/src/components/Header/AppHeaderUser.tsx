@@ -1,4 +1,5 @@
-import { useWeb3React } from "@web3-react/core";
+// import { useWeb3React } from "@web3-react/core";
+import { useGetAccountInfo } from 'hooks';
 import AddressDropdown from "../AddressDropdown/AddressDropdown";
 import ConnectWalletButton from "../Common/ConnectWalletButton";
 import React, { useCallback, useEffect } from "react";
@@ -14,7 +15,7 @@ import cx from "classnames";
 import { Trans } from "@lingui/macro";
 import NetworkDropdown from "../NetworkDropdown/NetworkDropdown";
 import LanguagePopupHome from "../NetworkDropdown/LanguagePopupHome";
-import { SKALE, getChainName } from "config/chains";
+import { SKALE, MULTIVERSX, getChainName } from "config/chains";
 import { switchNetwork } from "lib/wallets";
 import { useChainId } from "lib/chains";
 
@@ -25,8 +26,6 @@ type Props = {
   disconnectAccountAndCloseSettings: () => void;
   redirectPopupTimestamp: number;
   showRedirectModal: (to: string) => void;
-  mode: string;
-  onSetModeBtn: () => void;
 };
 
 export function AppHeaderUser({
@@ -36,26 +35,14 @@ export function AppHeaderUser({
   disconnectAccountAndCloseSettings,
   redirectPopupTimestamp,
   showRedirectModal,
-  mode,
-  onSetModeBtn
 }: Props) {
   const { chainId } = useChainId();
-  const { active, account } = useWeb3React();
   const showConnectionOptions = !isHomeSite();
 
+  const { address } = useGetAccountInfo();
+  const active = address.length === 0 ? false : true;
+
   const networkOptions = [
-    // {
-    //   label: getChainName(CRONOS),
-    //   value: CRONOS,
-    //   icon: "ic_cronos_24.svg",
-    //   color: "#E841424D",
-    // },
-    // {
-    //   label: getChainName(POLYGON),
-    //   value: POLYGON,
-    //   icon: "ic_polygon_24.svg",
-    //   color: "#E841424D",
-    // },
     {
       label: getChainName(SKALE),
       value: SKALE,
@@ -68,7 +55,7 @@ export function AppHeaderUser({
     if (active) {
       setWalletModalVisible(false);
     }
-  }, [active, setWalletModalVisible]);
+  }, [active, address, setWalletModalVisible]);
 
   const onNetworkSelect = useCallback(
     (option) => {
@@ -98,7 +85,7 @@ export function AppHeaderUser({
 
         {showConnectionOptions ? (
           <>
-            <ConnectWalletButton onClick={() => setWalletModalVisible(true)} imgSrc={connectWalletImg} mode={mode}>
+            <ConnectWalletButton onClick={() => setWalletModalVisible(true)} imgSrc={connectWalletImg}>
               {small ? <Trans>Connect</Trans> : <Trans>Connect Wallet</Trans>}
             </ConnectWalletButton>
             <NetworkDropdown
@@ -107,18 +94,16 @@ export function AppHeaderUser({
               selectorLabel={selectorLabel}
               onNetworkSelect={onNetworkSelect}
               openSettings={openSettings}
-              mode={mode}
             />
           </>
         ) : (
           <LanguagePopupHome />
         )}
-        {/* <button onClick={onSetModeBtn} className="mode-btn"><img src={mode === 'light' ? DarkModeImg : LightModeImg} alt='DarkMode.png' width='40px' /></button> */}
       </div>
     );
   }
 
-  const accountUrl = getAccountUrl(chainId, account);
+  const accountUrl = getAccountUrl(MULTIVERSX, address);
 
   return (
     <div className="App-header-user">
@@ -137,7 +122,7 @@ export function AppHeaderUser({
         <>
           <div className="App-header-user-address">
             <AddressDropdown
-              account={account}
+              account={address}
               accountUrl={accountUrl}
               disconnectAccountAndCloseSettings={disconnectAccountAndCloseSettings}
             />
@@ -148,7 +133,6 @@ export function AppHeaderUser({
             selectorLabel={selectorLabel}
             onNetworkSelect={onNetworkSelect}
             openSettings={openSettings}
-            mode={mode}
           />
         </>
       ) : (

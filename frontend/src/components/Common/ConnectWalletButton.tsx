@@ -7,11 +7,10 @@ type Props = {
   children: ReactNode;
   onClick: () => void;
   className?: string;
-  mode: string;
 };
 
-export default function ConnectWalletButton({ imgSrc, children, onClick, className, mode }: Props) {
-  let classNames = cx(mode === 'dark' ? "btn btn-primary btn-sm connect-wallet" : "btn btn-primary btn-sm connect-wallet-light", className);
+export default function ConnectWalletButton({ imgSrc, children, onClick, className }: Props) {
+  let classNames = cx("btn btn-primary btn-sm connect-wallet", className);
   return (
     <div className='bordered-btn'>
       <button className={classNames} onClick={onClick}>

@@ -7,6 +7,7 @@ const { parseEther } = ethers.utils;
 export const POLYGON = 137;
 export const CRONOS = 25;
 export const SKALE = 1444673419;
+export const MULTIVERSX = 10000;
 
 // TODO take it from web3
 export const DEFAULT_CHAIN_ID = SKALE;
@@ -216,6 +217,8 @@ export function getExplorerUrl(chainId) {
     return "https://cronoscan.com/";
   } else if (chainId === SKALE) {
     return "https://juicy-low-small-testnet.explorer.testnet.skalenodes.com/";
+  } else if (chainId === MULTIVERSX) {
+    return "https://devnet-explorer.multiversx.com/";
   }
   return "https://etherscan.io/";
 }

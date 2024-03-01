@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { DeFiWeb3Connector } from "@deficonnect/web3-connector";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import {
   CRONOS,
@@ -10,7 +9,6 @@ import {
   SKALE_RPC_PROVIDERS,
   DEFAULT_CHAIN_ID,
   getChainName,
-  getRpcUrl,
   NETWORK_METADATA,
   SUPPORTED_CHAIN_IDS,
 } from "config/chains";
@@ -31,10 +29,6 @@ import { helperToast } from "../helperToast";
 import { t } from "@lingui/macro";
 
 import { Web3ReactManagerFunctions } from "@web3-react/core/dist/types";
-import {
-  UserRejectedRequestError as UserRejectedRequestErrorWalletConnectV2,
-  WalletConnectConnectorV2,
-} from "./WalletConnectV2";
 
 export type NetworkMetadata = {
   chainId: string;
@@ -47,17 +41,6 @@ export type NetworkMetadata = {
   rpcUrls: string[];
   blockExplorerUrls: string[];
 };
-
-const DeFiWallet = new DeFiWeb3Connector({
-  supportedChainIds: [25],
-  appName: "Bluespade",
-  chainType: "eth", // only support 'eth' for DeFiWeb3Connector
-  chainId: "25",
-  rpcUrls: {
-    1: "https://mainnet.infura.io/v3/INFURA_API_KEY",
-    25: "https://evm-cronos.crypto.org/",
-  },
-});
 
 const injectedConnector = new InjectedConnector({
   supportedChainIds: SUPPORTED_CHAIN_IDS,
@@ -117,21 +100,6 @@ export const getWalletConnectConnector = () => {
     },
     qrcode: true,
     chainId,
-  });
-};
-
-export const getWalletConnectConnectorV2 = () => {
-  const chainId = Number(localStorage.getItem(SELECTED_NETWORK_LOCAL_STORAGE_KEY)) || DEFAULT_CHAIN_ID;
-  return new WalletConnectConnectorV2({
-    rpcMap: {
-      [CRONOS]: getRpcUrl(CRONOS)!,
-      [POLYGON]: getRpcUrl(POLYGON)!,
-      [SKALE]: getRpcUrl(SKALE)!
-    },
-    showQrModal: true,
-    chains: [chainId],
-    optionalChains: SUPPORTED_CHAIN_IDS,
-    projectId: "d15635432999db8e511b1bce62998a88"
   });
 };
 
@@ -319,58 +287,12 @@ export const getWalletConnectHandler = (
   return fn;
 };
 
-export const getWalletConnectV2Handler = (
-  activate: Web3ReactManagerFunctions["activate"],
-  deactivate: Web3ReactManagerFunctions["deactivate"],
-  setActivatingConnector: (connector?: WalletConnectConnectorV2) => void
-) => {
-  const fn = async () => {
-    const walletConnect = getWalletConnectConnectorV2();
-    setActivatingConnector(walletConnect);
-    activate(walletConnect, (ex) => {
-      if (ex instanceof UnsupportedChainIdError) {
-        helperToast.error(t`Unsupported chain. Switch to Arbitrum network on your wallet and try again`);
-        // eslint-disable-next-line no-console
-        console.warn(ex);
-      } else if (!(ex instanceof UserRejectedRequestErrorWalletConnectV2)) {
-        helperToast.error(ex.message);
-        // eslint-disable-next-line no-console
-        console.warn(ex);
-      }
-      clearWalletConnectData();
-      deactivate();
-    });
-  };
-  return fn;
-};
-
 export const getInjectedHandler = (
   activate: Web3ReactManagerFunctions["activate"],
   deactivate: Web3ReactManagerFunctions["deactivate"]
 ) => {
   const fn = async () => {
     activate(getInjectedConnector(), (e) => {
-      if (e instanceof UnsupportedChainIdError) {
-        showUnsupportedNetworkToast();
-
-        deactivate();
-
-        return;
-      }
-
-      const errString = e.message ?? e.toString();
-      helperToast.error(errString);
-    });
-  };
-  return fn;
-};
-
-export const getInjectedHandlerDeFiWallet = (
-  activate: Web3ReactManagerFunctions["activate"],
-  deactivate: Web3ReactManagerFunctions["deactivate"]
-) => {
-  const fn = async () => {
-    activate(DeFiWallet, (e) => {
       if (e instanceof UnsupportedChainIdError) {
         showUnsupportedNetworkToast();
 

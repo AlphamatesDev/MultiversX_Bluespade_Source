@@ -5,20 +5,31 @@ import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import useScrollToTop from "lib/useScrollToTop";
 import { RefreshContextProvider } from '../Context/RefreshContext'
+import { logout } from 'helpers';
 
 import { Switch, Route, HashRouter as Router, Redirect, useLocation, useHistory } from "react-router-dom";
+
+import {
+  ExtensionLoginButton,
+  // LedgerLoginButton,
+  // OperaWalletLoginButton,
+  // WalletConnectLoginButton,
+  // WebWalletLoginButton,
+  // XaliasLoginButton
+} from 'components/sdkDappComponents';
 
 import {
   DEFAULT_SLIPPAGE_AMOUNT,
   BASIS_POINTS_DIVISOR,
   getAppBaseUrl,
   isHomeSite,
-  isMobileDevice,
+  // isMobileDevice,
   REFERRAL_CODE_QUERY_PARAM,
   isDevelopment,
 } from "lib/legacy";
 
 import Home from "pages/Home/Home";
+import Test from "pages/Test/Test";
 import Dashboard from "pages/Dashboard/Dashboard";
 // import Ecosystem from "pages/Ecosystem/Ecosystem";
 import Stake from "pages/Stake/Stake";
@@ -48,10 +59,11 @@ import "styles/Font.css";
 import "./App.scss";
 import "styles/Input.css";
 
-import metamaskImg from "img/metamask.png";
-import defiwalletImg from "img/cryptocom.png"
-import coinbaseImg from "img/coinbaseWallet.png";
-import walletConnectImg from "img/walletconnect-circle-blue.svg";
+// import metamaskImg from "img/metamask.png";
+// import defiwalletImg from "img/cryptocom.png"
+// import coinbaseImg from "img/coinbaseWallet.png";
+// import walletConnectImg from "img/walletconnect-circle-blue.svg";
+import xwalletImg from "img/xwallet.png"
 import useEventToast from "components/EventToast/useEventToast";
 import EventToastContainer from "components/EventToast/EventToastContainer";
 import SEO from "components/Common/SEO";
@@ -91,14 +103,12 @@ import {
   SLIPPAGE_BPS_KEY,
 } from "config/localStorage";
 import {
-  activateInjectedProvider,
+  // activateInjectedProvider,
   clearWalletConnectData,
   clearWalletLinkData,
-  getInjectedHandler,
-  getInjectedHandlerDeFiWallet,
-  getWalletConnectV2Handler,
-  hasCoinBaseWalletExtension,
-  hasMetaMaskWalletExtension,
+  // getWalletConnectV2Handler,
+  // hasCoinBaseWalletExtension,
+  // hasMetaMaskWalletExtension,
   useEagerConnect,
   useInactiveListener,
 } from "lib/wallets";
@@ -154,11 +164,10 @@ function getWsProvider(active, chainId) {
 function FullApp() {
   const isHome = isHomeSite();
   const exchangeRef = useRef();
-  const { connector, library, deactivate, activate, active } = useWeb3React();
+  const { connector, library, deactivate, active } = useWeb3React();
   const { chainId } = useChainId();
   const location = useLocation();
   const history = useHistory();
-  const [mode, setMode] = useState('dark')
   useEventToast();
   const [activatingConnector, setActivatingConnector] = useState();
   useEffect(() => {
@@ -194,6 +203,9 @@ function FullApp() {
   }, [query, history, location]);
 
   const disconnectAccount = useCallback(() => {
+    sessionStorage.clear();
+    logout(`${window.location.origin}`, undefined, false);
+
     // only works with WalletConnect
     clearWalletConnectData();
     // force clear localStorage connection for MM/CB Wallet (Brave legacy)
@@ -208,73 +220,67 @@ function FullApp() {
     setIsSettingsVisible(false);
   };
 
-  const connectInjectedWallet = getInjectedHandler(activate);
-  const connectInjectedDeFiWallet = getInjectedHandlerDeFiWallet(activate);
-  const activateWalletConnectV2 = () => {
-    getWalletConnectV2Handler(activate, deactivate, setActivatingConnector)();
-  };
+  // const userOnMobileDevice = "navigator" in window && isMobileDevice(window.navigator);
 
-  const userOnMobileDevice = "navigator" in window && isMobileDevice(window.navigator);
+  // const activateMetaMask = () => {
+  //   if (!hasMetaMaskWalletExtension()) {
+  //     helperToast.error(
+  //       <div>
+  //         <Trans>MetaMask not detected.</Trans>
+  //         <br />
+  //         <br />
+  //         {userOnMobileDevice ? (
+  //           <Trans>
+  //             <ExternalLink href="https://metamask.io">Install MetaMask</ExternalLink>, and use BLU with its built-in
+  //             browser
+  //           </Trans>
+  //         ) : (
+  //           <Trans>
+  //             <ExternalLink href="https://metamask.io">Install MetaMask</ExternalLink> to start using BLU
+  //           </Trans>
+  //         )}
+  //       </div>
+  //     );
+  //     return false;
+  //   }
+  //   attemptActivateWallet("MetaMask");
+  // };
 
-  const activateMetaMask = () => {
-    if (!hasMetaMaskWalletExtension()) {
-      helperToast.error(
-        <div>
-          <Trans>MetaMask not detected.</Trans>
-          <br />
-          <br />
-          {userOnMobileDevice ? (
-            <Trans>
-              <ExternalLink href="https://metamask.io">Install MetaMask</ExternalLink>, and use BLU with its built-in
-              browser
-            </Trans>
-          ) : (
-            <Trans>
-              <ExternalLink href="https://metamask.io">Install MetaMask</ExternalLink> to start using BLU
-            </Trans>
-          )}
-        </div>
-      );
-      return false;
-    }
-    attemptActivateWallet("MetaMask");
-  };
+  // const activateDeFi = () => {
+  //   attemptActivateWallet("DeFiWallet");
+  // };
 
-  const activateDeFi = () => {
-    attemptActivateWallet("DeFiWallet");
-  };
+  // const activateCoinBase = () => {
+  //   if (!hasCoinBaseWalletExtension()) {
+  //     helperToast.error(
+  //       <div>
+  //         <Trans>Coinbase Wallet not detected.</Trans>
+  //         <br />
+  //         <br />
+  //         {userOnMobileDevice ? (
+  //           <Trans>
+  //             <ExternalLink href="https://www.coinbase.com/wallet">Install Coinbase Wallet</ExternalLink>, and use BLU
+  //             with its built-in browser
+  //           </Trans>
+  //         ) : (
+  //           <Trans>
+  //             <ExternalLink href="https://www.coinbase.com/wallet">Install Coinbase Wallet</ExternalLink> to start using
+  //             BLU
+  //           </Trans>
+  //         )}
+  //       </div>
+  //     );
+  //     return false;
+  //   }
+  //   attemptActivateWallet("CoinBase");
+  // };
 
-  const activateCoinBase = () => {
-    if (!hasCoinBaseWalletExtension()) {
-      helperToast.error(
-        <div>
-          <Trans>Coinbase Wallet not detected.</Trans>
-          <br />
-          <br />
-          {userOnMobileDevice ? (
-            <Trans>
-              <ExternalLink href="https://www.coinbase.com/wallet">Install Coinbase Wallet</ExternalLink>, and use BLU
-              with its built-in browser
-            </Trans>
-          ) : (
-            <Trans>
-              <ExternalLink href="https://www.coinbase.com/wallet">Install Coinbase Wallet</ExternalLink> to start using
-              BLU
-            </Trans>
-          )}
-        </div>
-      );
-      return false;
-    }
-    attemptActivateWallet("CoinBase");
-  };
-
-  const attemptActivateWallet = (providerName) => {
-    localStorage.setItem(SHOULD_EAGER_CONNECT_LOCALSTORAGE_KEY, true);
-    localStorage.setItem(CURRENT_PROVIDER_LOCALSTORAGE_KEY, providerName);
-    activateInjectedProvider(providerName);
-    providerName === "DeFiWallet" ? connectInjectedDeFiWallet() : connectInjectedWallet();
-  };
+  // const attemptActivateWallet = (providerName) => {
+  //   localStorage.setItem(SHOULD_EAGER_CONNECT_LOCALSTORAGE_KEY, true);
+  //   localStorage.setItem(CURRENT_PROVIDER_LOCALSTORAGE_KEY, providerName);
+  //   activateInjectedProvider(providerName);
+  //   providerName === "DeFiWallet" ? connectInjectedDeFiWallet() : connectInjectedWallet();
+  // };
 
   const [walletModalVisible, setWalletModalVisible] = useState(false);
   const [redirectModalVisible, setRedirectModalVisible] = useState(false);
@@ -453,16 +459,10 @@ function FullApp() {
       wsPositionRouter.off("CancelDecreasePosition", onCancelDecreasePosition);
     };
   }, [active, chainId, vaultAddress, positionRouterAddress]);
-  const onSetModeBtn = () => {
-    if (mode === 'light') {
-      setMode("dark")
-    } else {
-      setMode("light")
-    }
-  }
+
   return (
     <>
-      <div className={mode === 'light' ? 'App-light' : 'App'}>
+      <div className="App">
         <div className="App-content">
           {!isHome && <Header
             disconnectAccountAndCloseSettings={disconnectAccountAndCloseSettings}
@@ -470,8 +470,6 @@ function FullApp() {
             setWalletModalVisible={setWalletModalVisible}
             redirectPopupTimestamp={redirectPopupTimestamp}
             showRedirectModal={showRedirectModal}
-            mode={mode}
-            onSetModeBtn={onSetModeBtn}
           />}
           {isHome && (
             <Switch>
@@ -496,6 +494,9 @@ function FullApp() {
             <Switch>
               <Route exact path="/">
                 <Redirect to="/dashboard" />
+              </Route>
+              <Route exact path="/test">
+                <Test />
               </Route>
               <Route exact path="/trade">
                 <Exchange
@@ -639,35 +640,15 @@ function FullApp() {
         setIsVisible={setWalletModalVisible}
         label={t`Connect Wallet`}
       >
-        <button className="Wallet-btn MetaMask-btn" onClick={activateMetaMask}>
-          <img src={metamaskImg} alt="MetaMask" />
+        <ExtensionLoginButton className="Wallet-btn MetaMask-btn"
+          loginButtonText='DeFi Wallet'
+          callbackRoute='/#/dashboard'
+        >
+          <img src={xwalletImg} alt="MetaMask" />
           <div>
-            <Trans>MetaMask</Trans>
+            <Trans>DeFi Wallet</Trans>
           </div>
-        </button>
-        {
-          chainId === CRONOS ? 
-          <button className="Wallet-btn DeFiWallet-btn" onClick={activateDeFi}>
-            <img src={defiwalletImg} alt="DeFi Wallet" />
-            <div>
-              <Trans>Crypto DeFi Wallet</Trans>
-            </div>
-          </button>
-          :
-          <></>
-        }
-        <button className="Wallet-btn CoinbaseWallet-btn" onClick={activateCoinBase}>
-          <img src={coinbaseImg} alt="Coinbase Wallet" />
-          <div>
-            <Trans>Coinbase Wallet</Trans>
-          </div>
-        </button>
-        <button className="Wallet-btn WalletConnect-btn" onClick={activateWalletConnectV2}>
-          <img src={walletConnectImg} alt="WalletConnect" />
-          <div>
-            <Trans>WalletConnect</Trans>
-          </div>
-        </button>
+        </ExtensionLoginButton>
       </Modal>
       <Modal
         className="App-settings"

@@ -34,8 +34,6 @@ type Props = {
   setWalletModalVisible: (visible: boolean) => void;
   redirectPopupTimestamp: number;
   showRedirectModal: (to: string) => void;
-  mode: string;
-  onSetModeBtn: () => void;
 };
 
 export function Header({
@@ -44,8 +42,6 @@ export function Header({
   setWalletModalVisible,
   redirectPopupTimestamp,
   showRedirectModal,
-  mode,
-  onSetModeBtn
 }: Props) {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isNativeSelectorModalVisible, setIsNativeSelectorModalVisible] = useState(false);
@@ -108,7 +104,7 @@ export function Header({
 
           </div>
           <div className="App-header-container-left">
-            <AppHeaderLinks redirectPopupTimestamp={redirectPopupTimestamp} showRedirectModal={showRedirectModal} mode={mode} />
+            <AppHeaderLinks redirectPopupTimestamp={redirectPopupTimestamp} showRedirectModal={showRedirectModal} />
           </div>
           <div className="App-header-container-right">
             <AppHeaderUser
@@ -117,8 +113,6 @@ export function Header({
               setWalletModalVisible={setWalletModalVisible}
               redirectPopupTimestamp={redirectPopupTimestamp}
               showRedirectModal={showRedirectModal}
-              mode={mode}
-              onSetModeBtn={onSetModeBtn}
             />
           </div>
         </div>
@@ -146,8 +140,6 @@ export function Header({
                 setWalletModalVisible={setWalletModalVisible}
                 redirectPopupTimestamp={redirectPopupTimestamp}
                 showRedirectModal={showRedirectModal}
-                mode={mode}
-                onSetModeBtn={onSetModeBtn}
               />
             </div>
           </div>
@@ -157,7 +149,7 @@ export function Header({
         {isDrawerVisible && (
           <motion.div
             onClick={() => setIsDrawerVisible(false)}
-            className={`App-header-links-container ${mode === 'light' ? 'App-header-drawer-light' : 'App-header-drawer'}`}
+            className={`App-header-links-container App-header-drawer`}
             initial="hidden"
             animate="visible"
             exit="hidden"
@@ -170,7 +162,6 @@ export function Header({
               clickCloseIcon={() => setIsDrawerVisible(false)}
               redirectPopupTimestamp={redirectPopupTimestamp}
               showRedirectModal={showRedirectModal}
-              mode={mode}
             />
           </motion.div>
         )}
