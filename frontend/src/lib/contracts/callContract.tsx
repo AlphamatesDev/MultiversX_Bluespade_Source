@@ -2,7 +2,7 @@ import { BigNumber, Contract } from "ethers";
 import { helperToast } from "../helperToast";
 import { ToastifyDebug } from "components/ToastifyDebug/ToastifyDebug";
 import { extractError, NOT_ENOUGH_FUNDS, RPC_ERROR, SLIPPAGE, USER_DENIED } from "./transactionErrors";
-import { getGasLimit, setGasPrice } from "./utils";
+import { getGasLimit, setGasPrice } from "./utilsEVM";
 import { getExplorerUrl } from "config/chains";
 import { t, Trans } from "@lingui/macro";
 import ExternalLink from "components/ExternalLink/ExternalLink";

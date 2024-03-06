@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { chain, sumBy, sortBy } from 'lodash'
 
-import { RefreshContext } from '../Context/RefreshContext'
+import { RefreshContext } from '../context/RefreshContext'
 
 import OrderBook from "abis/OrderBook.json";
 import PositionManager from "abis/PositionManager.json";

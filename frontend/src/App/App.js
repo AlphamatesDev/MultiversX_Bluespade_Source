@@ -4,19 +4,33 @@ import { ethers } from "ethers";
 import { Web3ReactProvider, useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import useScrollToTop from "lib/useScrollToTop";
-import { RefreshContextProvider } from '../Context/RefreshContext'
+import { RefreshContextProvider } from '../context/RefreshContext'
 import { logout } from 'helpers';
 
 import { Switch, Route, HashRouter as Router, Redirect, useLocation, useHistory } from "react-router-dom";
 
 import {
+  AxiosInterceptorContext,
+  DappProvider,
   ExtensionLoginButton,
+  TransactionsToastList,
+  NotificationModal,
+  SignTransactionsModals
   // LedgerLoginButton,
   // OperaWalletLoginButton,
   // WalletConnectLoginButton,
   // WebWalletLoginButton,
   // XaliasLoginButton
 } from 'components/sdkDappComponents';
+
+import {
+  apiTimeout,
+  walletConnectV2ProjectId,
+  environment,
+  sampleAuthenticatedDomains
+} from 'config/dapp';
+
+import { RouteNamesEnum } from 'config/localConstants';
 
 import {
   DEFAULT_SLIPPAGE_AMOUNT,
@@ -625,7 +639,7 @@ function FullApp() {
       >
         <ExtensionLoginButton className="Wallet-btn MetaMask-btn"
           loginButtonText='DeFi Wallet'
-          callbackRoute='/#/dashboard'
+          callbackRoute='/#/test'
         >
           <img src={xwalletImg} alt="MetaMask" />
           <div>
@@ -687,19 +701,56 @@ function App() {
     dynamicActivate(defaultLanguage);
   }, []);
   return (
-    <SWRConfig value={{ refreshInterval: 5000 }}>
-      <Web3ReactProvider getLibrary={getLibrary}>
-        <RefreshContextProvider>
-          <SEO>
-            <Router>
-              <I18nProvider i18n={i18n}>
-                <FullApp />
-              </I18nProvider>
-            </Router>
-          </SEO>
-        </RefreshContextProvider>
-      </Web3ReactProvider>
-    </SWRConfig>
+    <AxiosInterceptorContext.Provider>
+      <AxiosInterceptorContext.Interceptor
+        authenticatedDomains={sampleAuthenticatedDomains}
+      >
+        <SWRConfig value={{ refreshInterval: 5000 }}>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <RefreshContextProvider>
+              <SEO>
+                <Router>
+                  <I18nProvider i18n={i18n}>
+
+                    <DappProvider
+                      environment={environment}
+                      customNetworkConfig={{
+                        name: 'customConfig',
+                        apiTimeout,
+                        walletConnectV2ProjectId
+                      }}
+                      dappConfig={{
+                        shouldUseWebViewProvider: true,
+                        logoutRoute: RouteNamesEnum.unlock
+                      }}
+                      customComponents={{
+                        transactionTracker: {
+                          props: {
+                            onSuccess: (sessionId) => {
+                              console.log(`Session ${sessionId} successfully completed`);
+                            },
+                            onFail: (sessionId, errorMessage) => {
+                              console.log(`Session ${sessionId} failed. ${errorMessage ?? ''}`);
+                            }
+                          }
+                        }
+                      }}
+                    >
+                      <AxiosInterceptorContext.Listener>
+                        <TransactionsToastList />
+                        <NotificationModal />
+                        <SignTransactionsModals />
+                        <FullApp />
+                      </AxiosInterceptorContext.Listener>
+                    </DappProvider>
+                  </I18nProvider>
+                </Router>
+              </SEO>
+            </RefreshContextProvider>
+          </Web3ReactProvider>
+        </SWRConfig>
+      </AxiosInterceptorContext.Interceptor>
+    </AxiosInterceptorContext.Provider>
   );
 }
 

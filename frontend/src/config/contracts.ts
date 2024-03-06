@@ -1,4 +1,4 @@
-import { SKALE } from "./chains";
+import { SKALE, MULTIVERSX } from "./chains";
 
 export const XGMT_EXCLUDED_ACCOUNTS = [
   "0x330eef6b9b1ea6edd620c825c9919dc8b611d5d5",
@@ -54,6 +54,9 @@ const CONTRACTS = {
 
     SuperTrader: "0x2163A8E17F8A997cA16ee7A2Aef9ec0C32910577"
   },
+  [MULTIVERSX]: {
+    PingPong: "erd1qqqqqqqqqqqqqpgqm6ad6xrsjvxlcdcffqe8w58trpec09ug9l5qde96pq"
+  }
 };
 
 export function getContract(chainId: number, name: string): string {
