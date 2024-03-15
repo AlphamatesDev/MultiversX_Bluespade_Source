@@ -27,6 +27,7 @@ export default function DashboardV2() {
 
     const { sendTransaction, transactionStatus } = useSendPingPongTransaction('rawPingPongSessionId');
 
+    console.log("eagle network = ", network)
     console.log("eagle transactionStatus = ", transactionStatus)
 
     const ping = async () => {
