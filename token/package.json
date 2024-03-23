@@ -1,0 +1,22 @@
+{
+    "name": "blu-token",
+    "version": "1.0.0",
+    "description": "",
+    "files": [
+        "index.js"
+    ],
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@multiversx/sdk-core": "^12.19.1",
+        "@multiversx/sdk-network-providers": "^2.4.1",
+        "@multiversx/sdk-wallet": "^4.4.0",
+        "bech32": "^2.0.0",
+        "bignumber.js": "^9.1.2",
+        "blake2b": "^2.1.4",
+        "buffer": "^6.0.3"
+    }
+}
